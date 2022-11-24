@@ -31,9 +31,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.csrf().disable().cors().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/random", "/api/user").permitAll()
-                .antMatchers("/visitor").hasRole("visitor")
-                .antMatchers("/admin").hasRole("admin")
+                .antMatchers("/login").permitAll()
+                .antMatchers("/api/user").hasRole("admin")
                 .anyRequest()
                 .authenticated();
 
@@ -46,9 +45,6 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(keycloakAuthenticationProvider);
     }
-
-    // Use Spring Boot property files instead of default keycloak.json
-
 
     // Register authentication strategy for public or confidential applications
     @Bean

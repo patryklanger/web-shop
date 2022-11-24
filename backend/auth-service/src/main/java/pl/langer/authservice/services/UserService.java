@@ -11,6 +11,7 @@ import pl.langer.authservice.config.KeycloakConfig;
 import pl.langer.authservice.dtos.FindResultDto;
 import pl.langer.authservice.dtos.RegisterRequest;
 import pl.langer.authservice.dtos.UserDto;
+import pl.langer.authservice.exception.UserNotFoundException;
 import pl.langer.authservice.exception.UsernameOrEmailTakenException;
 import pl.langer.authservice.mapper.user.UserMapper;
 import pl.langer.authservice.utils.Credentials;
@@ -70,6 +71,24 @@ public class UserService {
                 .totalCount(count)
                 .build();
     }
+    public void deleteUser(String userId){
+        getUser(userId);
+
+        UsersResource usersResource = getInstance();
+        usersResource.get(userId)
+                .remove();
+    }
+
+
+    public UserRepresentation getUser(String userId) {
+        UsersResource instance = KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
+        try {
+            return instance.get(userId).toRepresentation();
+        } catch (Exception e){
+            throw new UserNotFoundException("User not found");
+        }
+    }
+
 
     public UsersResource getInstance(){
         return KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();

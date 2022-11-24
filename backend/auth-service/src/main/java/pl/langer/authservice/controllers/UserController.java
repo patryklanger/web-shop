@@ -18,14 +18,23 @@ public class UserController {
 
     @CrossOrigin
     @PostMapping
-    public String addUser(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<Object> addUser(@RequestBody RegisterRequest registerRequest){
         service.addUser(registerRequest);
-        return "User Added Successfully";
+        return new ResponseEntity<>("User created!", HttpStatus.CREATED);
     }
 
     @CrossOrigin
     @GetMapping
     public ResponseEntity<FindResultDto<UserDto>> getUsers(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10")Long limit) {
         return new ResponseEntity<>(service.getUsers(page, limit), HttpStatus.OK);
+    }
+
+
+
+    @CrossOrigin
+    @DeleteMapping(path = "/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {
+        service.deleteUser(userId);
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 }
