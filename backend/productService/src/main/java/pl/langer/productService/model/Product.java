@@ -34,6 +34,7 @@ public class Product {
     @Column(nullable = true)
     private String imgUrl;
     @ManyToMany(mappedBy = "products")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private Set<Category> categories = new HashSet<>();
 
     public void addTag(String tag) {

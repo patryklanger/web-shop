@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import pl.langer.productService.dto.FindResultDto;
-import pl.langer.productService.dto.category.CategoryDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.dto.SearchDto;
@@ -29,8 +28,8 @@ public class ProductService {
 
     ProductRepository productRepository;
     ProductMapper productMapper;
-
     CategoryMapper categoryMapper;
+    CategoryRepository categoryRepository;
 
     public FindResultDto<ProductDto> findAll(SearchDto searchDto) {
         PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue());
@@ -46,17 +45,43 @@ public class ProductService {
                 .totalCount(products.getTotalElements())
                 .build();
     }
+
+    private Product getProductById(Long id) {
+        Optional<Product> productOptional = productRepository.findById(id);
+
+        if(productOptional.isEmpty()) {
+            throw new ProductNotFoundException("Product not found!");
+        }
+
+        return productOptional.get();
+    }
+    @Transactional
+    public ProductDto addCategoriesToProduct(Long productId, Set<Long> categoryIds) {
+        Product product = getProductById(productId);
+
+        Set<Category> categories = categoryIds.stream()
+                .map(categoryRepository::findById)
+                .map(c->c.orElseThrow(()->new CategoryNotFoundException("Category not found")))
+                .collect(Collectors.toSet());
+
+        Set<Category> newSet = product.getCategories();
+        newSet.addAll(categories);
+
+        product.setCategories(newSet);
+        return productMapper.mapEntityToDto(productRepository.save(product));
+
+    }
      public ProductDto addTags(Set<String> list, Long id){
         ProductDto productDto = findById(id);
         Product product = productMapper.mapDtoToEntity(productDto);
-        list.stream().forEach(tag->product.addTag(tag));
+        list.forEach(product::addTag);
         return save(productMapper.mapEntityToDto(product));
      }
 
      public ProductDto removeTags(Set<String> list, Long id) {
          ProductDto productDto = findById(id);
          Product product = productMapper.mapDtoToEntity(productDto);
-         list.stream().forEach(tag->product.removeTag(tag));
+         list.forEach(product::removeTag);
          return save(productMapper.mapEntityToDto(product));
      }
 
@@ -90,12 +115,8 @@ public class ProductService {
 
     @Transactional
     public void deleteById(Long id) {
-        ProductDto productDto = findById(id);
-        productMapper.mapDtoToEntity(productDto);
-        productDto.getCategories().stream()
-                .map(categoryMapper::mapDtoToEntity)
-                .forEach(c -> c.removeProduct(
-                        productMapper.mapDtoToEntity(productDto)));
-        productRepository.deleteById(id);
+        Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("Product not found!"));
+        product.getCategories().forEach(c->c.getProducts().remove(product));
+        productRepository.delete(product);
     }
 }

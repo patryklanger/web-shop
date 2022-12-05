@@ -9,11 +9,13 @@ import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
+import pl.langer.productService.exception.ProductNotFoundException;
 import pl.langer.productService.mapper.category.CategoryMapper;
 import pl.langer.productService.mapper.product.ProductMapper;
 import pl.langer.productService.model.Category;
 import pl.langer.productService.model.Product;
 import pl.langer.productService.repository.CategoryRepository;
+import pl.langer.productService.repository.ProductRepository;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class CategoryService {
     CategoryRepository categoryRepository;
-    ProductService productService;
+    ProductRepository productRepository;
     CategoryMapper categoryMapper;
     ProductMapper productMapper;
 
@@ -65,17 +67,15 @@ public class CategoryService {
         Category category = getCategoryById(categoryId);
 
         Set<Product> products = productIdList.stream()
-                .map(productService::findById)
-                .map(productMapper::mapDtoToEntity)
+                .map(productRepository::findById)
+                .map(c->c.orElseThrow(()->new ProductNotFoundException("Product not found!")))
                 .collect(Collectors.toSet());
 
         Set<Product> newSet = category.getProducts();
         newSet.addAll(products);
 
         category.setProducts(newSet);
-        categoryRepository.save(category);
-
-        return categoryMapper.mapEntityToDto(category);
+        return categoryMapper.mapEntityToDto(categoryRepository.save(category));
     }
 
     public CategoryDto editCategory(CategoryProductDto categoryProductDto, Long id) {
@@ -90,8 +90,8 @@ public class CategoryService {
         Category category = getCategoryById(categoryId);
 
         Set<Product> products = productIds.stream()
-                .map(productService::findById)
-                .map(productMapper::mapDtoToEntity)
+                .map(productRepository::findById)
+                .map(c->c.orElseThrow(()->new ProductNotFoundException("Product not found!")))
                 .collect(Collectors.toSet());
 
         Set<Product> newProducts = category.getProducts();
@@ -115,12 +115,7 @@ public class CategoryService {
 
     @Transactional
     public void deleteById(Long id) {
-        CategoryDto categoryDto = findById(id);
-        categoryMapper.mapDtoToEntity(categoryDto);
-        categoryDto.getProducts().stream()
-                .map(productMapper::mapDtoToEntity)
-                .forEach(p -> p.removeCategory(
-                        categoryMapper.mapDtoToEntity(categoryDto)));
+        findById(id);
         categoryRepository.deleteById(id);
     }
 }

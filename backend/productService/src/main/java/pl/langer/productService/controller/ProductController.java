@@ -3,15 +3,17 @@ package pl.langer.productService.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.dto.SearchDto;
-import pl.langer.productService.mapper.product.ProductMapper;
 import pl.langer.productService.service.CategoryService;
 import pl.langer.productService.service.ProductService;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,12 +56,7 @@ public class ProductController {
     @CrossOrigin
     @PostMapping("/{id}/category")
     public ResponseEntity<ProductDto> addCategoriesToProduct(@PathVariable Long id, @RequestBody Set<Long> categoryIds) {
-        categoryIds.stream().forEach(c->{
-            Set<Long> idList = new HashSet<>();
-            idList.add(id);
-            categoryService.addProductsToCategory(idList, c);
-        });
-        return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(productService.addCategoriesToProduct(id, categoryIds), HttpStatus.OK);
     }
 
     @CrossOrigin
@@ -84,7 +81,7 @@ public class ProductController {
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
         return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
-
+    @PermitAll
     @CrossOrigin
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable Long id) {
