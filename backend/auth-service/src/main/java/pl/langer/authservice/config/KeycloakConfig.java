@@ -15,7 +15,7 @@ public class KeycloakConfig {
     public final static String serverUrl = "http://localhost:28080/auth";
     public final static String realm = "web-shop";
     public final static String clientId = "keycloak-admin";
-    public final static String clientSecret = "c57ce869-42fa-41ac-9617-b49ea05fc72f";
+    public final static String clientSecret = "c6423687-0a7b-49eb-b9dd-99f25b3936b3";
 
 
 

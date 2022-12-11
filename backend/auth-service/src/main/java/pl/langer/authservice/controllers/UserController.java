@@ -7,7 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import pl.langer.authservice.dtos.FindResultDto;
 import pl.langer.authservice.dtos.RegisterRequest;
 import pl.langer.authservice.dtos.UserDto;
+import pl.langer.authservice.dtos.UserInfoDto;
+import pl.langer.authservice.model.UserInfo;
 import pl.langer.authservice.services.UserService;
+
+import javax.annotation.security.PermitAll;
+import javax.ws.rs.core.Response;
 
 @RestController
 @AllArgsConstructor
@@ -29,12 +34,11 @@ public class UserController {
         return new ResponseEntity<>(service.getUsers(page, limit), HttpStatus.OK);
     }
 
-
-
     @CrossOrigin
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {
         service.deleteUser(userId);
         return new ResponseEntity<>(userId, HttpStatus.OK);
     }
+
 }

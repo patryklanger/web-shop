@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.langer.authservice.dtos.LoginRequest;
 import pl.langer.authservice.dtos.LoginResponse;
-import pl.langer.authservice.exception.AuthorizationFailedException;
 import pl.langer.authservice.services.LoginService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +20,7 @@ public class LoginController {
 
     @PostMapping("login")
     public ResponseEntity<?> login (HttpServletRequest request,
-                                                @RequestBody LoginRequest loginRequest) throws Exception {
+                                                @RequestBody LoginRequest loginRequest) {
 
         ResponseEntity<LoginResponse> response = null;
         response = loginService.login(loginRequest);
