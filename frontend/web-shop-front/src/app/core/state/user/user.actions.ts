@@ -20,7 +20,6 @@ export class LoginError {
 
 export class Logout {
   static readonly type = `${ACTION_PREFIX} Logout`
-  constructor(public payload: string) {}
 }
 
 export class RefreshInit {

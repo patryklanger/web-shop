@@ -15,4 +15,8 @@ export class CacheService {
     const data = localStorage.getItem(key)
     return data === null ? null : JSON.parse(data)
   }
+
+  deleteItemFromLocalStorage(key: string) {
+    localStorage.removeItem(key);
+  }
 }

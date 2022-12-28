@@ -10,6 +10,7 @@ import { AuthGatewayService } from "../../gateways/auth/auth-gateway.service";
 import { DecodedJwt } from '../../models/auth/decode-jwt.model';
 import { CacheService } from '../../../shared/cache/cache.service';
 
+const USER_LOCAL_STORAGE_KEY = "user"
 
 const INITIAL_STATE = {
   username: null,
@@ -88,7 +89,7 @@ export class UserState implements OnDestroy {
       error: null,
     })
 
-    this.cacheService.saveItemToLocalStorage('user', newState);
+    this.cacheService.saveItemToLocalStorage(USER_LOCAL_STORAGE_KEY, newState);
     this.notificationService.showSuccessNotification("Login successful")
 
   }
@@ -104,6 +105,8 @@ export class UserState implements OnDestroy {
   logout({ setState }: StateContext<UserStateModel>) {
 
     setState({ ...INITIAL_STATE });
+    this.cacheService.deleteItemFromLocalStorage(USER_LOCAL_STORAGE_KEY)
+
     this.notificationService.showSuccessNotification(`Logout successful`)
   }
 
@@ -128,7 +131,7 @@ export class UserState implements OnDestroy {
   @Action(UserActions.Restore)
   restore({ setState }: StateContext<UserStateModel>) {
 
-    const user = this.cacheService.getItemFromLocalStorage('user') as User;
+    const user = this.cacheService.getItemFromLocalStorage(USER_LOCAL_STORAGE_KEY) as User;
 
     if (!user) {
       return;

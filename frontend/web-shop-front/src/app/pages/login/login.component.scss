@@ -1,0 +1,11 @@
+.login-form {
+  &__container {
+    padding: 10px;
+    background-color: gray;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 300px;
+    justify-content: center;
+  }
+}

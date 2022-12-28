@@ -11,7 +11,7 @@ export abstract class AbstractGatewayService {
 
   constructor(private http: HttpClient) {}
 
-  protected get$<T>(url: string, body: HttpParams | BodyParams = {}): Observable<T> {
+  protected get$<T>(url: string): Observable<T> {
     return this.http.get(`${this.getBaseUrl()}/${url}`) as Observable<T>
   }
 
@@ -27,7 +27,7 @@ export abstract class AbstractGatewayService {
     return this.http.patch(`${this.getBaseUrl()}/${url}`, body) as Observable<T>
   }
 
-  protected delete$<T>(url: string, body: HttpParams | BodyParams = {}): Observable<T> {
+  protected delete$<T>(url: string): Observable<T> {
     return this.http.delete(`${this.getBaseUrl()}/${url}`) as Observable<T>
   }
 

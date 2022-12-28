@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { UserActions } from 'src/app/core/state/user';
+import { Subject, takeUntil, tap } from 'rxjs';
+
+import { UserActions, UserState } from 'src/app/core/state/user';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup;
+  isLoggedIn: boolean = false;
+
+  private readonly _destroy$ = new Subject<void>();
 
   constructor(private store: Store, private fb: FormBuilder) {
     this.formGroup = this.fb.group({
@@ -19,10 +24,25 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.store.select(UserState.isLoggedIn).pipe(
+      tap(isLoggedIn => this.isLoggedIn = isLoggedIn),
+      takeUntil(this._destroy$)
+    ).subscribe()
   }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
+
   refreshToken() {
     this.store.dispatch(new UserActions.RefreshInit())
+  }
+
+  logout() {
+    this.store.dispatch(new UserActions.Logout())
   }
 
   onFormSubmit() {
