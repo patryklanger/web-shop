@@ -1,0 +1,6 @@
+<form [formGroup]="formGroup" (submit)="onFormSubmit()">
+  <input type="text" formControlName="username" />
+  <input type="password" formControlName="password" />
+  <button>Submit</button>
+</form>
+<button (click)="refreshToken()">Refresh Token</button>
