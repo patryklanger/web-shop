@@ -26,3 +26,7 @@ export class Logout {
 export class RefreshInit {
   static readonly type = `${ACTION_PREFIX} Refresh Init`
 }
+
+export class Restore {
+  static readonly type = `${ACTION_PREFIX} Try to restore from local storage`;
+}
