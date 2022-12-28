@@ -28,6 +28,9 @@ public class Product {
     private Long stockAmount;
 
     @Column(nullable = false)
+    private Boolean isDeleted = false;
+
+    @Column(nullable = false)
     @ElementCollection
 
     private Set<String> tags = new HashSet<>();

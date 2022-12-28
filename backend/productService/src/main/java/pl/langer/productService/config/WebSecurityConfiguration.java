@@ -35,7 +35,7 @@ public class WebSecurityConfiguration extends KeycloakWebSecurityConfigurerAdapt
         super.configure(http);
         http.csrf().disable().cors().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/api/category/**", "/api/product/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/category/**", "/api/product/**", "/photos/**").permitAll()
                 .antMatchers("**").hasRole("admin")
                 .anyRequest()
                 .authenticated()

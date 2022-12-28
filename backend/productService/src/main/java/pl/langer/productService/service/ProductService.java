@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.dto.SearchDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
+import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
 import pl.langer.productService.mapper.category.CategoryMapper;
 import pl.langer.productService.mapper.product.ProductMapper;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProductService {
 
+    PhotoService photoService;
     ProductRepository productRepository;
     ProductMapper productMapper;
     CategoryMapper categoryMapper;
@@ -39,6 +42,7 @@ public class ProductService {
         return FindResultDto.<ProductDto>builder()
                 .count((long) products.getNumberOfElements())
                 .results(products.getContent().stream()
+                        .filter(p->!p.getIsDeleted())
                         .map(productMapper::mapEntityToDto)
                         .collect(Collectors.toList()))
                 .startElement(pageRequest.getOffset())
@@ -86,12 +90,11 @@ public class ProductService {
      }
 
     public ProductDto findById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isPresent()) {
-            return productMapper.mapEntityToDto(product.get());
-        } else {
+        Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("Product not found!"));
+        if(product.getIsDeleted()) {
             throw new ProductNotFoundException("Product not found!");
         }
+        return productMapper.mapEntityToDto(product);
     }
 
     public ProductDto editProduct(ProductCategoryDto productCategoryDto, Long id) {
@@ -102,6 +105,17 @@ public class ProductService {
         productDto.setStockAmount(productCategoryDto.getStockAmount());
         productDto.setTags(productCategoryDto.getTags());
         return save(productDto);
+    }
+
+    public ProductDto addPhotoToProduct(Long productId, MultipartFile multipartFile) {
+        Product product = getProductById(productId);
+        try {
+            String dir = photoService.saveProductPhoto(multipartFile, productId);
+            product.setImgUrl(dir);
+            return productMapper.mapEntityToDto(productRepository.save(product));
+        } catch(Exception e) {
+            throw new ImageUploadException();
+        }
     }
 
     public ProductDto save(ProductDto object) {
@@ -116,7 +130,7 @@ public class ProductService {
     @Transactional
     public void deleteById(Long id) {
         Product product = productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("Product not found!"));
-        product.getCategories().forEach(c->c.getProducts().remove(product));
-        productRepository.delete(product);
+        product.setIsDeleted(true);
+        productRepository.save(product);
     }
 }

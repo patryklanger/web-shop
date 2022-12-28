@@ -22,7 +22,7 @@ public class UserInfoService {
         return userInfoMapper.mapEntityToDto(userInfoRepository.save(userInfo));
     }
 
-    public UserInfoDto getUserInfo(String userId){
-        userInfoRepository.findByUserId(userId).stream().map()
-    }
+//    public UserInfoDto getUserInfo(String userId){
+//        userInfoRepository.findByUserId(userId).stream().map()
+//    }
 }

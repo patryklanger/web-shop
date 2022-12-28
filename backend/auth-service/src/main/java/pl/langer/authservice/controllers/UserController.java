@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path="api/user")
+@RequestMapping(path="api/auth/user")
 public class UserController {
 
     UserService service;

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import pl.langer.productService.exception.CategoryNotFoundException;
+import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
 
 import java.util.LinkedHashMap;
@@ -29,6 +30,22 @@ public class ControllerAdvisor {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
         return new ResponseEntity<>(msg, httpStatus);
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<Object> handleImageUploadException(ImageUploadException ex) {
+        String msg = "Unable to upload image!";
+        HttpStatus httpStatus = HttpStatus.NOT_ACCEPTABLE;
+
+        return new ResponseEntity<>(msg, httpStatus);
+    }
+
+    @ExceptionHandler(java.nio.file.NoSuchFileException.class)
+    public ResponseEntity<Object> handleNoSuchFileException(java.nio.file.NoSuchFileException ex){
+        String msg = "File not found!";
+        HttpStatus httpStatus = HttpStatus.NOT_FOUND;
+
+        return new ResponseEntity<>(msg,httpStatus);
     }
 
     private Map<String, Object> buildMessageBody(String msg) {

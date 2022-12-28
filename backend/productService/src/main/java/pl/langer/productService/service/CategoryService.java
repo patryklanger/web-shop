@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.category.CategoryDto;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
+import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
+import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
 import pl.langer.productService.mapper.category.CategoryMapper;
 import pl.langer.productService.mapper.product.ProductMapper;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CategoryService {
+
+    PhotoService photoService;
     CategoryRepository categoryRepository;
     ProductRepository productRepository;
     CategoryMapper categoryMapper;
@@ -51,6 +56,17 @@ public class CategoryService {
                 .startElement(pageRequest.getOffset())
                 .totalCount(categories.getTotalElements())
                 .build();
+    }
+
+    public CategoryDto addPhotoToCategory(Long categoryId, MultipartFile multipartFile) {
+        Category category = getCategoryById(categoryId);
+        try {
+            String dir = photoService.saveCategoryPhoto(multipartFile, categoryId);
+            category.setImgUrl(dir);
+            return categoryMapper.mapEntityToDto(categoryRepository.save(category));
+        } catch(Exception e) {
+            throw new ImageUploadException();
+        }
     }
 
     public CategoryDto findById(Long id) {

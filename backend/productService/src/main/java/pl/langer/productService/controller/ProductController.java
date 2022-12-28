@@ -1,10 +1,12 @@
 package pl.langer.productService.controller;
 
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
@@ -19,7 +21,7 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path = "api/product")
+@RequestMapping(path = "api/products/product")
 public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
@@ -74,6 +76,12 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
         return new ResponseEntity<>(productService.save(productDto), HttpStatus.CREATED);
+    }
+
+    @CrossOrigin
+    @PostMapping("/{id}/image")
+    public ResponseEntity<ProductDto> addImageToProduct(@RequestParam("image")MultipartFile multipartFile, @PathVariable Long id) {
+        return new ResponseEntity<>(productService.addPhotoToProduct(id, multipartFile), HttpStatus.OK);
     }
 
     @CrossOrigin

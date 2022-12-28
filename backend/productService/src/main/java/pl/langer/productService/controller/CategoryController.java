@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.category.CategoryDto;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
@@ -14,7 +15,7 @@ import java.util.Set;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(path="api/category")
+@RequestMapping(path="api/products/category")
 public class CategoryController {
     private final CategoryService categoryService;
 
@@ -57,6 +58,12 @@ public class CategoryController {
     @GetMapping("/{id}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable Long id) {
         return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @PostMapping("/{id}/image")
+    public ResponseEntity<CategoryDto> addImageToCategory(@RequestParam("image") MultipartFile multipartFile, @PathVariable Long id) {
+        return new ResponseEntity<>(categoryService.addPhotoToCategory(id, multipartFile), HttpStatus.OK);
     }
 
     @CrossOrigin

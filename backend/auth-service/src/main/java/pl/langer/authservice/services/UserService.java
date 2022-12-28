@@ -5,6 +5,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.langer.authservice.config.KeycloakConfig;
@@ -43,7 +44,7 @@ public class UserService {
         UsersResource instance = getInstance();
         Response response = instance.create(user);
 
-        if(response.getStatusInfo().equals(Response.Status.CONFLICT)) {
+        if(response.getStatus() == HttpStatus.CONFLICT.value()) {
             throw new UsernameOrEmailTakenException("Username or email taken");
         }
     }
