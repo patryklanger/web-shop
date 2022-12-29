@@ -11,8 +11,8 @@ export abstract class AbstractGatewayService {
 
   constructor(private http: HttpClient) {}
 
-  protected get$<T>(url: string): Observable<T> {
-    return this.http.get(`${this.getBaseUrl()}/${url}`) as Observable<T>
+  protected get$<T>(url?: string, params?: HttpParams): Observable<T> {
+    return this.http.get(`${this.getBaseUrl()}/${url}`, { params: params }) as Observable<T>
   }
 
   protected post$<T>(url: string, body: HttpParams | BodyParams = {}): Observable<T> {

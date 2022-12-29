@@ -1,9 +1,11 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Subject, takeUntil, tap } from 'rxjs';
+import { filter, Subject, takeUntil, tap } from 'rxjs';
 
 import { UserActions, UserState } from 'src/app/core/state/user';
+import { UserGatewayService } from 'src/app/core/gateways/user/user-gateway.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,11 +15,11 @@ import { UserActions, UserState } from 'src/app/core/state/user';
 export class LoginComponent implements OnInit, OnDestroy {
 
   formGroup: FormGroup;
-  isLoggedIn: boolean = false;
+  loginFailed: string | null = null;
 
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private store: Store, private fb: FormBuilder) {
+  constructor(private store: Store, private fb: FormBuilder, private userGateway: UserGatewayService, private router: Router) {
     this.formGroup = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
@@ -25,8 +27,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.store.select(UserState.state).pipe(
+      tap(state => this.loginFailed = state.error),
+      takeUntil(this._destroy$)
+    ).subscribe()
+
     this.store.select(UserState.isLoggedIn).pipe(
-      tap(isLoggedIn => this.isLoggedIn = isLoggedIn),
+      filter((loggedIn) => loggedIn),
+      tap(() => this.router.navigateByUrl("")),
       takeUntil(this._destroy$)
     ).subscribe()
   }
@@ -45,11 +53,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.store.dispatch(new UserActions.Logout())
   }
 
+  getUsers() {
+    this.userGateway.getUsers$().pipe(tap(console.log)).subscribe()
+  }
+
   onFormSubmit() {
     if (!this.formGroup.valid) {
       return;
     }
-    this.store.dispatch(new UserActions.LoginInit({ username: this.username?.value, password: this.password?.value }))
+    this.store.dispatch(new UserActions.LoginInit({ username: this.username?.value, password: this.password?.value }));
+    this.formGroup.reset();
+    this.formGroup.setErrors(null);
   }
 
   get username() {

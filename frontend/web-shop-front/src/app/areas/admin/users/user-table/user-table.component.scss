@@ -1,0 +1,18 @@
+.user-table {
+  &__table {
+    width: 100%;
+  }
+  &__load-more-button {
+    margin-top: 1.5rem;
+  }
+  &__button-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+span.ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

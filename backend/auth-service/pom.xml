@@ -41,6 +41,10 @@
 					<groupId>javax.servlet</groupId>
 					<artifactId>servlet-api</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -66,16 +70,14 @@
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-spring-boot-starter</artifactId>
-			<version>20.0.1</version>
+			<version>20.0.2</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.keycloak</groupId>
 			<artifactId>keycloak-admin-client</artifactId>
-			<version>20.0.1</version>
+			<version>20.0.2</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -91,10 +93,6 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
-
-
-
-
 	<build>
 		<plugins>
 			<plugin>

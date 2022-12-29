@@ -52,6 +52,21 @@ services:
       - ${AUTH_SERVICE_POSTGRESQL_PORT}:5432
     networks:
       - auth-service
+  
+  web-shop-discovery:
+    image: patryklanger/web-shop-discovery:latest
+    ports:
+      - ${DISCOVERY_SERVICE_PORT}:8761
+
+  web-shop-product-service:
+    image: patryklanger/web-shop-product-service:latest
+    ports:
+      - 8082:8082
+    links:
+      - product-database
+    networks:
+      - product-service
+
 
 networks:
   local-keycloak:

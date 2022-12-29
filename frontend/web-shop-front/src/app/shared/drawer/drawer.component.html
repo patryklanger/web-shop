@@ -1,0 +1,8 @@
+<mat-drawer-container class="drawer__container" [hasBackdrop]="false">
+  <mat-drawer [opened]="menuState" mode="push">
+    <app-side-menu></app-side-menu>
+  </mat-drawer>
+  <mat-drawer-content>
+    <ng-content></ng-content>
+  </mat-drawer-content>
+</mat-drawer-container>

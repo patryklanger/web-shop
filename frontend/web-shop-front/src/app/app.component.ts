@@ -11,6 +11,8 @@ import { UserActions } from './core/state/user';
 export class AppComponent implements OnInit {
   title = 'web-shop-front';
 
+  drawerOpened = true;
+
   constructor(private store: Store) {}
 
   ngOnInit() {

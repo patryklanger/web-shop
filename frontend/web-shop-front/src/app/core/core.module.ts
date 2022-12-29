@@ -5,6 +5,7 @@ import { NgxsReduxDevtoolsPluginModule } from "@ngxs/devtools-plugin";
 
 import { UserState } from './state/user';
 import { SharedModule } from '../shared/shared.module';
+import { AppState } from './state/app';
 
 
 
@@ -13,7 +14,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     CommonModule,
     SharedModule,
-    NgxsModule.forRoot([UserState]),
+    NgxsModule.forRoot([UserState, AppState]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
   ]
 })

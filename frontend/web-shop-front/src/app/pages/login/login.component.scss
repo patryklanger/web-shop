@@ -1,11 +1,9 @@
-.login-form {
-  &__container {
-    padding: 10px;
-    background-color: gray;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    width: 300px;
-    justify-content: center;
-  }
+mat-card {
+  max-width: 400px;
+  margin: 2em auto;
+  text-align: center;
+}
+
+mat-form-field {
+  display: block;
 }

@@ -9,6 +9,8 @@ import { NotificationService } from "../../../shared/notification/notification.s
 import { AuthGatewayService } from "../../gateways/auth/auth-gateway.service";
 import { DecodedJwt } from '../../models/auth/decode-jwt.model';
 import { CacheService } from '../../../shared/cache/cache.service';
+import { AuthUser } from '../../models/auth/auth-user.model';
+import { Router } from '@angular/router';
 
 const USER_LOCAL_STORAGE_KEY = "user"
 
@@ -21,14 +23,7 @@ const INITIAL_STATE = {
   error: null
 }
 
-export interface User {
-  username: string | null,
-  roles: string[] | null,
-  accessToken: string | null,
-  refreshToken: string | null,
-}
-
-export interface UserStateModel extends User {
+export interface UserStateModel extends AuthUser {
   loading: boolean,
   error: string | null
 }
@@ -46,6 +41,7 @@ export class UserState implements OnDestroy {
     private authGateway: AuthGatewayService,
     private notificationService: NotificationService,
     private cacheService: CacheService,
+    private router: Router
   ) {}
 
   ngOnDestroy() {
@@ -54,8 +50,18 @@ export class UserState implements OnDestroy {
   }
 
   @Selector()
-  static isLoggedIn(state: UserStateModel) {
+  static isLoggedIn(state: UserStateModel): boolean {
     return !!state.accessToken;
+  }
+
+  @Selector()
+  static accessToken(state: UserStateModel): string | null {
+    return state.accessToken;
+  }
+
+  @Selector()
+  static state(state: UserStateModel): UserStateModel {
+    return state;
   }
 
   @Action(UserActions.LoginInit)
@@ -72,18 +78,18 @@ export class UserState implements OnDestroy {
   }
 
   @Action(UserActions.LoginSuccess)
-  loginSuccess({ patchState }: StateContext<UserStateModel>, { payload }: UserActions.LoginSuccess) {
+  loginSuccess({ setState }: StateContext<UserStateModel>, { payload }: UserActions.LoginSuccess) {
 
     const user = jwt_decode(payload.access_token) as DecodedJwt
 
-    const newState: Partial<UserStateModel> = {
+    const newState: AuthUser = {
       username: user.preferred_username,
       roles: user.resource_access['auth-service'].roles,
       refreshToken: payload.refresh_token,
       accessToken: payload.access_token
     }
 
-    patchState({
+    setState({
       ...newState,
       loading: false,
       error: null,
@@ -107,6 +113,8 @@ export class UserState implements OnDestroy {
     setState({ ...INITIAL_STATE });
     this.cacheService.deleteItemFromLocalStorage(USER_LOCAL_STORAGE_KEY)
 
+    this.router.navigateByUrl('auth')
+
     this.notificationService.showSuccessNotification(`Logout successful`)
   }
 
@@ -122,7 +130,7 @@ export class UserState implements OnDestroy {
 
     this.authGateway.refreshToken$(ctx.getState().refreshToken!).pipe(
       mergeMap((e) => ctx.dispatch(new UserActions.LoginSuccess(e))),
-      catchError((e: HttpErrorResponse) => of(ctx.dispatch(new UserActions.LoginError(e.error.message)))),
+      catchError((e: HttpErrorResponse) => of(ctx.dispatch(new UserActions.Logout()))),
       takeUntil(this._destroy$)
     ).subscribe()
 
@@ -131,7 +139,7 @@ export class UserState implements OnDestroy {
   @Action(UserActions.Restore)
   restore({ setState }: StateContext<UserStateModel>) {
 
-    const user = this.cacheService.getItemFromLocalStorage(USER_LOCAL_STORAGE_KEY) as User;
+    const user = this.cacheService.getItemFromLocalStorage(USER_LOCAL_STORAGE_KEY) as AuthUser;
 
     if (!user) {
       return;
