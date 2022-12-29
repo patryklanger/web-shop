@@ -38,13 +38,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
                 .antMatchers("**").hasRole("admin")
                 .anyRequest()
                 .authenticated()
-                .and().cors().configurationSource(request -> {
-                    CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("*"));
-                    configuration.setAllowedMethods(List.of("*"));
-                    configuration.setAllowedHeaders(List.of("*"));
-                    return configuration;
-                }).and().csrf().disable()
+                .and().cors().disable()
+                .csrf().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

@@ -1,4 +1,4 @@
-package pl.langer.config;
+package pl.langer.gateway.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class SecurityConfig {
                 .anyExchange().permitAll().and()
                 .cors().configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
-                    configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+                    configuration.setAllowedOrigins(List.of("*"));
                     configuration.setAllowedMethods(List.of("*"));
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
