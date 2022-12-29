@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { DrawerComponent } from './drawer/drawer.component';
@@ -26,7 +27,8 @@ import { RouterModule } from '@angular/router';
     MatButtonModule,
     MatSidenavModule,
     MatListModule,
-    RouterModule
+    RouterModule,
+    MatBadgeModule
   ],
   exports: [NavBarComponent, DrawerComponent]
 

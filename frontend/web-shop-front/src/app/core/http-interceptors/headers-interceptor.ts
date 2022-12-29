@@ -30,7 +30,6 @@ export class HeadersInterceptor implements HttpInterceptor, OnDestroy {
     } else {
       const authReq = this.addAuthorizationHeaders(req);
       return next.handle(authReq).pipe(catchError(error => {
-        console.log(error);
         if (error instanceof HttpErrorResponse && error.status === 401) {
           return this.handle401Error(authReq, next);
         }

@@ -17,7 +17,7 @@ public class PhotoService {
 
         FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
 
-        return "api/products/" + uploadDir + "/" + filename;
+        return uploadDir + "/" + filename;
     }
 
     public String saveCategoryPhoto(MultipartFile multipartFile, Long categoryId) throws IOException {
@@ -26,6 +26,6 @@ public class PhotoService {
 
         FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
 
-        return "api/products/" + uploadDir + "/" + filename;
+        return uploadDir + "/" + filename;
     }
 }

@@ -1,0 +1,11 @@
+.cart-page {
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  &__total {
+    margin-top: 1rem;
+    margin-left: auto;
+  }
+}

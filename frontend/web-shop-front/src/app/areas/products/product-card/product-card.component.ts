@@ -16,7 +16,7 @@ export class ProductCardComponent {
   constructor(private store: Store) {}
 
   addToCart() {
-    this.store.dispatch(new AppActions.AddToCart({ product: this.product!, quantity: 1 }))
+    this.store.dispatch(new AppActions.ChangeAmountInCart({ product: this.product!, quantity: 1 }))
   }
 
   getProductImg(): string {

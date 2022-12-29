@@ -1,0 +1,6 @@
+<div *ngIf="categories" class="categories-list__container">
+  <app-category-card
+    *ngFor="let category of categories"
+    [category]="category"
+  ></app-category-card>
+</div>

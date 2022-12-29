@@ -1,0 +1,24 @@
+<mat-card *ngIf="cartElement" class="cart-element">
+  <img class="cart-element__img" [src]="getProductImg()" />
+  <div class="cart-element__name">
+    <h3>{{ cartElement.product.name }}</h3>
+    <h4>${{ cartElement.product.price }}</h4>
+  </div>
+  <div class="cart-element__quantity">Quantity: {{ cartElement.quantity }}</div>
+  <div class="cart-element__subprice">
+    <div class="cart-element__subprice-container">
+      <p>Subprice: ${{ getSubprice() }}</p>
+      <div class="cart-element__subprice-container__buttons">
+        <button mat-icon-button (click)="addMoreToCart()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-icon-button (click)="minusFromCart()">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="removeItemFromCart()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-card>

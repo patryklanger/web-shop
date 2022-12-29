@@ -1,0 +1,10 @@
+<h3>Hi! That's your cart</h3>
+<div *ngIf="cartItems">
+  <div class="cart-page__container">
+    <app-cart-item
+      *ngFor="let item of cartItems"
+      [cartElementId]="item.product.id"
+    ></app-cart-item>
+  </div>
+  <p class="cart-page__total">Total amount: ${{ totalAmount }}</p>
+</div>

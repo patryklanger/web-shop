@@ -2,10 +2,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { filter, Subject, takeUntil, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { UserActions, UserState } from 'src/app/core/state/user';
 import { UserGatewayService } from 'src/app/core/gateways/user/user-gateway.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -62,8 +62,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.store.dispatch(new UserActions.LoginInit({ username: this.username?.value, password: this.password?.value }));
-    this.formGroup.reset();
-    this.formGroup.setErrors(null);
   }
 
   get username() {

@@ -64,6 +64,11 @@ export class UserState implements OnDestroy {
     return state;
   }
 
+  @Selector()
+  static roles(state: UserStateModel): string[] | undefined {
+    return state.roles?.map(r => r.toLowerCase())
+  }
+
   @Action(UserActions.LoginInit)
   loginInit(ctx: StateContext<UserStateModel>, { payload }: UserActions.LoginInit) {
 

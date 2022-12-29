@@ -1,17 +1,3 @@
-<!-- <form
-  *ngIf="!isLoggedIn"
-  [formGroup]="formGroup"
-  class="login-form__container"
-  (submit)="onFormSubmit()"
->
-  <input type="text" formControlName="username" />
-  <input type="password" formControlName="password" />
-  <button [disabled]="!formGroup.valid">Submit</button>
-</form>
-<button [disabled]="!isLoggedIn" (click)="refreshToken()">Refresh Token</button>
-<button [disabled]="!isLoggedIn" (click)="logout()">Logout</button>
-<button (click)="getUsers()">Get users</button> -->
-
 <mat-card>
   <mat-card-content>
     <form [formGroup]="formGroup" (submit)="onFormSubmit()">
