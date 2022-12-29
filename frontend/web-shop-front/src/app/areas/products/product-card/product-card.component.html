@@ -1,1 +1,25 @@
-<p>product-card works!</p>
+<div *ngIf="product" class="card" style="width: 18rem">
+  <img class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" />
+  <div class="card-body">
+    <h5 class="card-title">{{ product.name }}</h5>
+    <p class="card-text">{{ product.description }}</p>
+    <mat-divider></mat-divider>
+    <p class="card__additional-info"><b>Price: </b>${{ product.price }}</p>
+    <mat-divider></mat-divider>
+    <p class="card__additional-info">
+      <b>Stock amount: </b>{{ product.stockAmount }}
+    </p>
+    <mat-divider></mat-divider>
+    <p class="card__additional-info">
+      <b>Tags: </b
+      >{{
+        product.tags.length === 0 ? "No tags added" : product.tags.join(",")
+      }}
+    </p>
+    <mat-divider></mat-divider>
+    <div class="card__button-container">
+      <button mat-raised-button>Check it</button>
+      <button mat-raised-button (click)="addToCart()">Add to cart</button>
+    </div>
+  </div>
+</div>

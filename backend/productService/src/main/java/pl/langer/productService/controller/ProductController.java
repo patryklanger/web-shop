@@ -26,7 +26,7 @@ public class ProductController {
     private final ProductService productService;
     private final CategoryService categoryService;
 
-    @CrossOrigin
+
     @GetMapping
     public ResponseEntity<FindResultDto<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10") Long limit) {
         SearchDto searchDto = SearchDto.builder()
@@ -37,31 +37,31 @@ public class ProductController {
 
     }
 
-    @CrossOrigin
+
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> editProduct(@PathVariable Long id, @RequestBody ProductCategoryDto productCategoryDto) {
         return new ResponseEntity<>(productService.editProduct(productCategoryDto, id), HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @PostMapping("/{id}/tag")
     public ResponseEntity<ProductDto> addTagsToProduct(@PathVariable Long id, @RequestBody Set<String> tags){
         return new ResponseEntity<>(productService.addTags(tags,id),HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @DeleteMapping("/{id}/tag")
     public ResponseEntity<ProductDto> removeTagsFromProduct(@PathVariable Long id, @RequestBody Set<String> tags) {
         return new ResponseEntity<>(productService.removeTags(tags,id),HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @PostMapping("/{id}/category")
     public ResponseEntity<ProductDto> addCategoriesToProduct(@PathVariable Long id, @RequestBody Set<Long> categoryIds) {
         return new ResponseEntity<>(productService.addCategoriesToProduct(id, categoryIds), HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @DeleteMapping("/{id}/category")
     public ResponseEntity<ProductDto> deleteCategoriesFromProduct(@PathVariable Long id, @RequestBody Set<Long> categoryIds) {
         categoryIds.stream().forEach(c->{
@@ -72,25 +72,25 @@ public class ProductController {
         return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @PostMapping
     public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
         return new ResponseEntity<>(productService.save(productDto), HttpStatus.CREATED);
     }
 
-    @CrossOrigin
+
     @PostMapping("/{id}/image")
     public ResponseEntity<ProductDto> addImageToProduct(@RequestParam("image")MultipartFile multipartFile, @PathVariable Long id) {
         return new ResponseEntity<>(productService.addPhotoToProduct(id, multipartFile), HttpStatus.OK);
     }
 
-    @CrossOrigin
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProduct(@PathVariable Long id) {
         return new ResponseEntity<>(productService.findById(id), HttpStatus.OK);
     }
     @PermitAll
-    @CrossOrigin
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteProduct(@PathVariable Long id) {
         productService.deleteById(id);

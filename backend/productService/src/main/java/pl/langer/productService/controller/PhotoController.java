@@ -26,7 +26,7 @@ public class PhotoController {
 
     ServletContext context;
 
-    @CrossOrigin
+
     @GetMapping(path = "/**")
     public ResponseEntity<byte[]> getImage(HttpServletRequest request) throws IOException {
         String requestURL = request.getRequestURL().toString();

@@ -10,7 +10,7 @@ import pl.langer.authservice.services.LoginService;
 
 import javax.servlet.http.HttpServletRequest;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @AllArgsConstructor
 @RequestMapping(path="api/auth")
@@ -18,13 +18,13 @@ public class LoginController {
 
     LoginService loginService;
 
-    @CrossOrigin
+//    @CrossOrigin
     @PostMapping("login")
     public ResponseEntity<?> login (@RequestBody LoginRequest loginRequest) {
         return loginService.login(loginRequest);
     }
 
-    @CrossOrigin
+//    @CrossOrigin
     @PostMapping("refresh-token/{token}")
     public ResponseEntity<?> refreshToken (@PathVariable String token) {
         return loginService.refreshToken(token);

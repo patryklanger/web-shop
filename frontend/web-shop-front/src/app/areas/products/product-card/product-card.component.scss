@@ -1,0 +1,19 @@
+* {
+  color: black;
+}
+button {
+  color: white;
+}
+mat-divider {
+  background-color: #ccc;
+}
+.card {
+  &__button-container {
+    padding: 1rem 0.5rem 0 0.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__additional-info {
+    margin: 0.5rem 0;
+  }
+}

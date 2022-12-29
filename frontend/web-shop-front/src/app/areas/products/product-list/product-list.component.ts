@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
 import { Product } from 'src/app/core/models/product/product.model';
 import { BehaviorSubject, Subject, switchMap, tap, takeUntil, Observable } from 'rxjs';
@@ -17,7 +17,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private readonly currentPage$ = new BehaviorSubject(0);
   private readonly _destroy$ = new Subject<void>()
 
-  constructor(private productGateway: ProductGatewayService) {}
+  constructor(private productGateway: ProductGatewayService, private cdr: ChangeDetectorRef) {}
 
   ngOnDestroy() {
     this._destroy$.next();
@@ -42,7 +42,8 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private currentPageProducts$(currentPage: number): Observable<PaginatedResult<Product>> {
     return this.productGateway.getProducts$(currentPage).pipe(
       tap(products => this.products = products.results),
-      tap(products => this.pagesNumber = products.totalCount / products.count)
+      tap(products => this.pagesNumber = products.totalCount / products.count),
+      tap(() => this.cdr.markForCheck()),
     )
   }
 }

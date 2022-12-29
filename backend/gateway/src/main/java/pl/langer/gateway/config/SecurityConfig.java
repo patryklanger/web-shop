@@ -15,16 +15,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
-        http.authorizeExchange()
-                .anyExchange().permitAll().and()
+        http
                 .cors().configurationSource(request -> {
                     CorsConfiguration configuration = new CorsConfiguration();
                     configuration.setAllowedOrigins(List.of("*"));
                     configuration.setAllowedMethods(List.of("*"));
                     configuration.setAllowedHeaders(List.of("*"));
                     return configuration;
-                });
-        http.csrf().disable();
+                }).and().csrf().disable();
         return http.build();
     }
 }
