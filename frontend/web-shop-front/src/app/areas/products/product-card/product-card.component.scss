@@ -17,3 +17,8 @@ mat-divider {
     margin: 0.5rem 0;
   }
 }
+.card-img-top {
+  height: 300px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}

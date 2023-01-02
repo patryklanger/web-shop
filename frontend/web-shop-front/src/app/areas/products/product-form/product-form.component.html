@@ -1,0 +1,19 @@
+<form *ngIf="formGroup" class="product-form__form" [formGroup]="formGroup">
+  <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+    <input formControlName="description" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Price</mat-label>
+    <input formControlName="price" type="number" matInput />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Stock Amount</mat-label>
+    <input formControlName="stockAmount" type="number" matInput />
+  </mat-form-field>
+  <button mat-raised-button>Submit</button>
+</form>
