@@ -49,7 +49,6 @@ export class AddCategoriesDialogComponent implements OnInit, OnDestroy {
   onSubmit() {
     const categories = [...this.currentCategories]
     this.productGateway.addCategoriesToProduct$(this.data.id, categories).pipe(
-      tap(console.log),
       tap((product) => this.data.product$.next(product)),
       tap(() => this.notificationService.showSuccessNotification("Categories added")),
       tap(() => this.dialogRef.close()),
