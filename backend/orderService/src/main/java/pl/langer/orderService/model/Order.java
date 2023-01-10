@@ -1,5 +1,7 @@
 package pl.langer.orderService.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +9,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,23 +23,34 @@ public class Order {
     private Long id;
 
     private String userId;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "basekt_id", referencedColumnName = "id")
-    private Basket basket;
 
+    @OneToMany(targetEntity = BasketElement.class, cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "order_id",nullable = false)
+    @JsonIgnoreProperties("order")
+    private Set<BasketElement> basket;
+
+    @Column(nullable = false)
     private Date createdAt;
 
+    @Enumerated
+    @Column(nullable = false)
     private OrderState orderState;
 
+    @Column(nullable = false)
     private String city;
 
+    @Column(nullable = false)
     private String street;
 
-    private Integer buildingNumber;
+    @Column(nullable = false)
+    private String buildingNumber;
 
-    private Integer apartmentNumber;
+    private String apartmentNumber;
 
+    @Column(nullable = false)
     private String country;
 
     private Long phoneNumber;
+
+    private Boolean paid;
 }

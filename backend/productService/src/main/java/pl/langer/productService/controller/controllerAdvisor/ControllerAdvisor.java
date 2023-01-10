@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import pl.langer.productService.exception.CategoryNotFoundException;
 import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
+import pl.langer.productService.exception.StockTooLowException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,6 +47,15 @@ public class ControllerAdvisor {
         HttpStatus httpStatus = HttpStatus.NOT_FOUND;
 
         return new ResponseEntity<>(msg,httpStatus);
+    }
+
+    @ExceptionHandler(StockTooLowException.class)
+    public ResponseEntity<Object> handleStockTooLowException(StockTooLowException ex) {
+        return new ResponseEntity<>("Stock too low!", HttpStatus.FORBIDDEN);
+    }
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<Object> handleValidationError(org.springframework.dao.DataIntegrityViolationException ex) {
+        return new ResponseEntity<>("Validation error", HttpStatus.BAD_REQUEST);
     }
 
     private Map<String, Object> buildMessageBody(String msg) {

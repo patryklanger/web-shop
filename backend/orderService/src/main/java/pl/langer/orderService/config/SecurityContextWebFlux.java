@@ -1,4 +1,4 @@
-package pl.langer.gateway.config;
+package pl.langer.orderService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
@@ -16,7 +16,10 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.HttpStatusServerAccessDeniedHandler;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @EnableWebFluxSecurity
@@ -24,10 +27,9 @@ public class SecurityContextWebFlux {
 
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf().disable().cors().disable().anonymous().and()
                 .authorizeExchange()
-                .pathMatchers(HttpMethod.POST, "/api/auth/user", "/api/auth/login", "/api/auth/refresh-token/**", "/api/orders/**").permitAll()
-                .pathMatchers(HttpMethod.GET, "/api/products/category/**", "/api/products/product/**", "/api/products/photos/**").permitAll()
+                .pathMatchers(HttpMethod.POST,"/api/orders").permitAll()
                 .pathMatchers("**").hasRole("admin")
                 .anyExchange().authenticated()
                 .and()

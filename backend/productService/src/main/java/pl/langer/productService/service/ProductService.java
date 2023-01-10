@@ -9,9 +9,12 @@ import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.dto.SearchDto;
+import pl.langer.productService.dto.product.ProductPriceRequestDto;
+import pl.langer.productService.dto.product.ProductPriceResponseDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
 import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
+import pl.langer.productService.exception.StockTooLowException;
 import pl.langer.productService.mapper.category.CategoryMapper;
 import pl.langer.productService.mapper.product.ProductMapper;
 import pl.langer.productService.model.Category;
@@ -20,6 +23,8 @@ import pl.langer.productService.repository.CategoryRepository;
 import pl.langer.productService.repository.ProductRepository;
 
 import javax.transaction.Transactional;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -58,6 +63,21 @@ public class ProductService {
         }
 
         return productOptional.get();
+    }
+    public List<ProductPriceResponseDto> getPriceAndDecreaseStockAmount(List<ProductPriceRequestDto> productPriceRequestDtos) {
+        List<ProductPriceResponseDto> result = new LinkedList<>();
+        productPriceRequestDtos.stream()
+                .forEach(c->{
+                    var product = productRepository.findById(c.getId()).orElseThrow(()->new ProductNotFoundException("Product not found!"));
+                    if(product.getStockAmount() < c.getAmount()) {
+                        throw new StockTooLowException("Stock too low exception!");
+                    }
+                    product.setStockAmount(product.getStockAmount()-c.getAmount());
+                    var response = ProductPriceResponseDto.builder().price(c.getAmount()*product.getPrice()).amount(c.getAmount()).id(c.getId()).build();
+                    result.add(response);
+                    productRepository.save(product);
+                });
+        return result;
     }
     @Transactional
     public ProductDto addCategoriesToProduct(Long productId, Set<Long> categoryIds) {

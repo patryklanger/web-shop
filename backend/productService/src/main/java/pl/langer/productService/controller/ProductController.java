@@ -1,7 +1,6 @@
 package pl.langer.productService.controller;
 
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,12 +9,14 @@ import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.product.ProductCategoryDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.dto.SearchDto;
+import pl.langer.productService.dto.product.ProductPriceRequestDto;
+import pl.langer.productService.dto.product.ProductPriceResponseDto;
 import pl.langer.productService.service.CategoryService;
 import pl.langer.productService.service.ProductService;
 
 import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -34,6 +35,11 @@ public class ProductController {
                 .build();
         return new ResponseEntity<>(productService.findAll(searchDto), HttpStatus.OK);
 
+    }
+
+    @PostMapping("/buy")
+    public ResponseEntity<List<ProductPriceResponseDto>> getPriceAndDecreaseStockAmount(@RequestBody List<ProductPriceRequestDto> productPriceRequestDtos) {
+        return new ResponseEntity<>(productService.getPriceAndDecreaseStockAmount(productPriceRequestDtos), HttpStatus.OK);
     }
 
 

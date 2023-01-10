@@ -1,10 +1,14 @@
 package pl.langer.orderService.model;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,10 +20,15 @@ public class BasketElement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String productId;
-    private Long amount;
+    @Column(nullable = false)
+    private Long productId;
 
-    @ManyToOne
-    @JoinColumn(name="basket_id", nullable=false)
-    private Basket basket;
+    @Column(nullable = false)
+    private Integer amount;
+    private Float price;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", referencedColumnName = "id",  nullable = false, insertable = false, updatable = false)
+    @JsonIgnoreProperties("basket")
+    private Order order;
 }
