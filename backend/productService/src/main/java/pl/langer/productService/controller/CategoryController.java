@@ -47,12 +47,6 @@ public class CategoryController {
     }
 
 
-    @PostMapping("/{id}/product")
-    public ResponseEntity<CategoryDto> addProductsToCategory(@RequestBody Set<Long> categoryIdSet, @PathVariable Long id) {
-        return new ResponseEntity<>(categoryService.addProductsToCategory(categoryIdSet, id), HttpStatus.OK);
-    }
-
-
     @DeleteMapping("/{id}/product")
     public ResponseEntity<CategoryDto> deleteProductsFromCategory(@RequestBody Set<Long> categoryIds, @PathVariable Long id) {
         return new ResponseEntity<>(categoryService.deleteProductsFromCategory(categoryIds,id), HttpStatus.ACCEPTED);

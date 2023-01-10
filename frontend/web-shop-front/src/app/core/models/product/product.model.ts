@@ -10,3 +10,10 @@ export interface Product {
   tags: string[],
   categories?: Category[]
 }
+
+export interface ProductFormData {
+  name: string,
+  description?: string,
+  price: number;
+  stockAmount: number;
+}

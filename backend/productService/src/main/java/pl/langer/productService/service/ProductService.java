@@ -90,13 +90,9 @@ public class ProductService {
                 .map(categoryRepository::findById)
                 .map(c->c.orElseThrow(()->new CategoryNotFoundException("Category not found")))
                 .collect(Collectors.toSet());
+        product.setCategories(categories);
 
-        Set<Category> newSet = product.getCategories();
-        newSet.addAll(categories);
-
-        product.setCategories(newSet);
         return productMapper.mapEntityToDto(productRepository.save(product));
-
     }
      public ProductDto addTags(Set<String> list, Long id){
         ProductDto productDto = findById(id);
@@ -120,13 +116,12 @@ public class ProductService {
         return productMapper.mapEntityToDto(product);
     }
 
-    public ProductDto editProduct(ProductCategoryDto productCategoryDto, Long id) {
+    public ProductDto editProduct(CreateProductDto createProductDto, Long id) {
         ProductDto productDto = findById(id);
-        productDto.setName(productCategoryDto.getName());
-        productDto.setPrice(productCategoryDto.getPrice());
-        productDto.setDescription(productCategoryDto.getDescription());
-        productDto.setStockAmount(productCategoryDto.getStockAmount());
-        productDto.setTags(productCategoryDto.getTags());
+        productDto.setName(createProductDto.getName());
+        productDto.setPrice(createProductDto.getPrice());
+        productDto.setDescription(createProductDto.getDescription());
+        productDto.setStockAmount(createProductDto.getStockAmount());
         return save(productDto);
     }
 

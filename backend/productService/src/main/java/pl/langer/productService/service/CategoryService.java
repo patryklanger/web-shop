@@ -83,21 +83,7 @@ public class CategoryService {
         }
     }
 
-    @Transactional
-    public CategoryDto addProductsToCategory(Set<Long> productIdList, Long categoryId) {
-        Category category = getCategoryById(categoryId);
 
-        Set<Product> products = productIdList.stream()
-                .map(productRepository::findById)
-                .map(c->c.orElseThrow(()->new ProductNotFoundException("Product not found!")))
-                .collect(Collectors.toSet());
-
-        Set<Product> newSet = category.getProducts();
-        newSet.addAll(products);
-
-        category.setProducts(newSet);
-        return categoryMapper.mapEntityToDto(categoryRepository.save(category));
-    }
 
     public CategoryDto editCategory(CategoryProductDto categoryProductDto, Long id) {
         CategoryDto categoryDto = findById(id);

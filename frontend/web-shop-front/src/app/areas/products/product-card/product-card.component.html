@@ -1,5 +1,6 @@
 <div *ngIf="product" class="card" style="width: 18rem">
-  <img class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" />
+  <div class="card-img-top-container" >
+  <img *ngIf="this.product?.imgUrl !== null" class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" /></div>
   <div class="card-body">
     <h5 class="card-title">{{ product.name }}</h5>
     <p class="card-text">{{ product.description }}</p>
@@ -18,7 +19,7 @@
     </p>
     <mat-divider></mat-divider>
     <div class="card__button-container">
-      <button mat-raised-button>Check it</button>
+      <button mat-raised-button (click)="goToDetails()">Check it</button>
       <button mat-raised-button (click)="addToCart()">Add to cart</button>
     </div>
   </div>

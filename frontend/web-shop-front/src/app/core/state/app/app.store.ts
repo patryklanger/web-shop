@@ -68,7 +68,12 @@ export class AppState {
       }
       currentCart[index].quantity = currentCart[index].quantity + payload.quantity
     } else {
-      currentCart.unshift({ product: payload.product, quantity: payload.quantity });
+      if (payload.product.stockAmount > 0) {
+        currentCart.unshift({ product: payload.product, quantity: payload.quantity });
+      } else {
+        this.notificationService.showSuccessNotification("This product isn't available");
+        return;
+      }
     }
     const newCart = currentCart;
     patchState({

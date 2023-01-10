@@ -1,0 +1,7 @@
+<h3>Add categories</h3>
+<div class="add-categories__container">
+<section class="add-categories__checkbox-container">
+  <mat-checkbox *ngFor="let category of shortCategories" [value]="category.id.toString()" [checked]="data.current.includes(category.id)" (change)="onCheckChange($event)">{{category.name}}</mat-checkbox>
+</section>
+<button mat-raised-button (click)="onSubmit()">Submit</button>
+</div>

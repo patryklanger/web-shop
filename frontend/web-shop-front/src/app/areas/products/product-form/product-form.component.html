@@ -1,19 +1,23 @@
-<form *ngIf="formGroup" class="product-form__form" [formGroup]="formGroup">
-  <mat-form-field appearance="fill">
+<form *ngIf="formGroup" #formDirective="ngForm" (submit)="onSubmit(formDirective)"   class="product-form__form" [formGroup]="formGroup">
+  <mat-form-field class="product-form__field" appearance="fill">
     <mat-label>Name</mat-label>
     <input formControlName="name" matInput />
+    <mat-error [appError]="nameError"></mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="product-form__field" appearance="fill">
     <mat-label>Description</mat-label>
     <input formControlName="description" matInput />
+    <mat-error [appError]="descriptionError"></mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="product-form__field" appearance="fill">
     <mat-label>Price</mat-label>
     <input formControlName="price" type="number" matInput />
+    <mat-error [appError]="stockAmountError"></mat-error>
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <mat-form-field class="product-form__field" appearance="fill">
     <mat-label>Stock Amount</mat-label>
     <input formControlName="stockAmount" type="number" matInput />
+    <mat-error [appError]="priceError"></mat-error>
   </mat-form-field>
   <button mat-raised-button>Submit</button>
 </form>

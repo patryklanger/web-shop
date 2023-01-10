@@ -1,0 +1,15 @@
+.add-categories {
+  &__checkbox-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 10px;
+    gap: 20px;
+  }
+}

@@ -16,7 +16,11 @@ import { SharedModule } from '../../shared/shared.module';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
-
+import { ProductDetailsComponent } from './product-details/product-details.component';
+import { EditProductComponent } from './edit-product/edit-product.component';
+import { AddCategoriesDialogComponent } from './add-categories-dialog/add-categories-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,10 @@ import { MatIconModule } from '@angular/material/icon';
     ProductListComponent,
     AddProductComponent,
     ProductFormComponent,
-    CategoryPickerComponent
+    CategoryPickerComponent,
+    ProductDetailsComponent,
+    EditProductComponent,
+    AddCategoriesDialogComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +44,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     SharedModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatCheckboxModule
   ]
 })
 export class ProductsModule {}

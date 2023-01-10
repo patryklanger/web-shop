@@ -1,0 +1,13 @@
+.product-details{
+  &__container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__actions {
+    display: flex;
+    gap: 10px;
+  }
+}

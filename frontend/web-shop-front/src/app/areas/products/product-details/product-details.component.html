@@ -1,0 +1,10 @@
+<div *ngIf="product" class="product-details__container">
+  <app-product-card [product]="product"></app-product-card>
+  <div class="product-details__actions">
+  <button mat-raised-button>Upload image</button>
+  <button mat-raised-button (click)="edit()">Edit</button>
+  <button mat-raised-button (click)="openAddCategoriesDialog()">Add to categories</button>
+</div>
+</div>
+
+

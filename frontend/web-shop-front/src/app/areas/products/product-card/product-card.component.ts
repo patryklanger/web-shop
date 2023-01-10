@@ -4,6 +4,7 @@ import { Product } from 'src/app/core/models/product/product.model';
 import { environment } from 'src/environments/environment.prod';
 import { Store } from '@ngxs/store';
 import { AppState, AppActions } from 'src/app/core/state/app';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-card',
@@ -13,7 +14,7 @@ import { AppState, AppActions } from 'src/app/core/state/app';
 export class ProductCardComponent {
   @Input() product?: Product;
 
-  constructor(private store: Store) {}
+  constructor(private store: Store, private router: Router) {}
 
   addToCart() {
     this.store.dispatch(new AppActions.ChangeAmountInCart({ product: this.product!, quantity: 1 }))
@@ -21,6 +22,10 @@ export class ProductCardComponent {
 
   getProductImg(): string {
     return `${environment.apiEndpoint}/products/${this.product?.imgUrl}`
+  }
+
+  goToDetails() {
+    this.router.navigateByUrl(`/products/details/${this.product.id}`)
   }
 
 }

@@ -21,6 +21,7 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.categoryCtrl.setValue(+this.currentCategory.getValue())
     this.categoryGateway.getCategoriesShort$().pipe(
       tap(categories => this.shortCategories = categories),
       takeUntil(this._destroy$)

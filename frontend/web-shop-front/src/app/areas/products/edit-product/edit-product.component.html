@@ -1,0 +1,5 @@
+<div class="edit-product__container">
+  <h2>edit product</h2>
+  <app-product-form *ngIf="product" [formData]="formData" [type]="type" (formDataSubmit)="onSubmit($event)"></app-product-form>
+</div>
+
