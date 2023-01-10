@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.ReactiveJwtAuthenticationConverterAdapter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.HttpStatusServerAccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -25,6 +26,14 @@ public class SecurityContextWebFlux {
     @Bean
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http.csrf().disable()
+                .cors().configurationSource(request->{
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("*"));
+                    config.setAllowedMethods(List.of("*"));
+                    config.setAllowedHeaders(List.of("*"));
+                    return config;
+                })
+                .and()
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/api/auth/user", "/api/auth/login", "/api/auth/refresh-token/**", "/api/orders/**").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/products/category/**", "/api/products/product/**", "/api/products/photos/**").permitAll()
