@@ -1,6 +1,15 @@
-<div *ngIf="products" class="products-list__container">
+<div class="products-list">
+  <app-category-picker [currentCategory]="categoryId$"></app-category-picker>
+  <div *ngIf="products" class="products-list__container">
   <app-product-card
     *ngFor="let product of products"
     [product]="product"
   ></app-product-card>
+</div>
+
+<app-paginator class="products-list__paginator"
+[page$]="currentPage$"
+[pageSize$]="currentPageSize$"
+[totalCount]="totalCount"
+></app-paginator>
 </div>

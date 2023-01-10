@@ -7,3 +7,8 @@ export interface Category {
   imgUrl: string;
   products?: Product[]
 }
+
+export interface CategoryShort {
+  id: number;
+  name: string;
+}

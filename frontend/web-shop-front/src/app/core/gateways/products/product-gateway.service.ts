@@ -12,13 +12,16 @@ import { AbstractGatewayService } from '../abstract-gateway.service';
 })
 export class ProductGatewayService extends AbstractGatewayService {
 
-  getProducts$(page = 0, limit = 10): Observable<PaginatedResult<Product>> {
-    const params = new HttpParams({
+  getProducts$(page = 0, limit = 10, categoryId?: string): Observable<PaginatedResult<Product>> {
+    let params = new HttpParams({
       fromObject: {
         page: page,
         limit: limit
       }
     })
+    if (categoryId) {
+      params = params.set("categoryId", categoryId);
+    }
     return this.get$("product", params)
   }
 

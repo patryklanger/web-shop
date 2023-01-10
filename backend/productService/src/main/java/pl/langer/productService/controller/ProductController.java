@@ -6,15 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.FindResultDto;
-import pl.langer.productService.dto.product.ProductCategoryDto;
-import pl.langer.productService.dto.product.ProductDto;
+import pl.langer.productService.dto.ParamsDto;
+import pl.langer.productService.dto.product.*;
 import pl.langer.productService.dto.SearchDto;
-import pl.langer.productService.dto.product.ProductPriceRequestDto;
-import pl.langer.productService.dto.product.ProductPriceResponseDto;
 import pl.langer.productService.service.CategoryService;
 import pl.langer.productService.service.ProductService;
 
 import javax.annotation.security.PermitAll;
+import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,12 +27,14 @@ public class ProductController {
 
 
     @GetMapping
-    public ResponseEntity<FindResultDto<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10") Long limit) {
+    public ResponseEntity<FindResultDto<ProductDto>> getAllProducts(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10") Long limit, @RequestParam(required = false) Long categoryId) {
+        ParamsDto paramsDto = ParamsDto.builder().categoryId(categoryId).build();
+
         SearchDto searchDto = SearchDto.builder()
                 .page(page)
                 .limit(limit)
                 .build();
-        return new ResponseEntity<>(productService.findAll(searchDto), HttpStatus.OK);
+        return new ResponseEntity<>(productService.findAll(searchDto, paramsDto), HttpStatus.OK);
 
     }
 
@@ -79,8 +80,8 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ProductDto> addProduct(@RequestBody ProductDto productDto) {
-        return new ResponseEntity<>(productService.save(productDto), HttpStatus.CREATED);
+    public ResponseEntity<ProductDto> addProduct(@Valid @RequestBody CreateProductDto createProductDto) {
+        return new ResponseEntity<>(productService.createProduct(createProductDto), HttpStatus.CREATED);
     }
 
 

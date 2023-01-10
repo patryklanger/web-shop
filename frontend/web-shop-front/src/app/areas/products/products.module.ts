@@ -12,7 +12,10 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { ProductsRoutingModule } from './products-routing.module';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ProductFormComponent } from './product-form/product-form.component';
-
+import { SharedModule } from '../../shared/shared.module';
+import { CategoryPickerComponent } from './category-picker/category-picker.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -21,7 +24,8 @@ import { ProductFormComponent } from './product-form/product-form.component';
     ProductPageComponent,
     ProductListComponent,
     AddProductComponent,
-    ProductFormComponent
+    ProductFormComponent,
+    CategoryPickerComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +34,10 @@ import { ProductFormComponent } from './product-form/product-form.component';
     MatButtonModule,
     MatFormFieldModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    SharedModule,
+    MatSelectModule,
+    MatIconModule
   ]
 })
 export class ProductsModule {}

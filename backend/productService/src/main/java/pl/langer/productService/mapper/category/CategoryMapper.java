@@ -3,6 +3,7 @@ package pl.langer.productService.mapper.category;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import pl.langer.productService.dto.category.CategoryDto;
+import pl.langer.productService.dto.category.CategoryNameDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
 import pl.langer.productService.model.Category;
 
@@ -11,6 +12,6 @@ public interface CategoryMapper {
 
     Category mapDtoToEntity(CategoryDto categoryDto);
     CategoryDto mapEntityToDto(Category category);
-
     Category mapDtoToEntity(CategoryProductDto categoryProductDto);
+    CategoryNameDto mapEntityToNameDto(Category category);
 }

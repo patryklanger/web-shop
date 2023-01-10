@@ -3,7 +3,7 @@ import { environment } from 'src/environments/environment.prod';
 import { AbstractGatewayService } from '../abstract-gateway.service';
 import { Observable } from 'rxjs';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
-import { Category } from '../../models/product/category.model';
+import { Category, CategoryShort } from '../../models/product/category.model';
 import { HttpParams } from '@angular/common/http';
 
 @Injectable({
@@ -19,6 +19,10 @@ export class CategoryGatewayService extends AbstractGatewayService {
       }
     })
     return this.get$("category", params)
+  }
+
+  getCategoriesShort$(): Observable<CategoryShort[]> {
+    return this.get$("category/short")
   }
 
 

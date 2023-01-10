@@ -1,0 +1,9 @@
+.category-picker {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.5rem;
+  &__button {
+    margin-top: 0.5rem;
+  }
+}

@@ -82,6 +82,7 @@ export class AppState {
     let cart = getState().cart;
     cart = cart.filter(p => p.product.id !== payload.id)
     patchState({ cart: cart })
+    this.cacheService.saveItemToLocalStorage('cart', cart);
   }
 
   @Action(AppActions.RestoreCart)

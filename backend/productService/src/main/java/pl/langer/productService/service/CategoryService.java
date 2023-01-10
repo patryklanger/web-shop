@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.category.CategoryDto;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
+import pl.langer.productService.dto.category.CategoryNameDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
 import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
@@ -33,6 +34,10 @@ public class CategoryService {
     ProductRepository productRepository;
     CategoryMapper categoryMapper;
     ProductMapper productMapper;
+
+    public Set<CategoryNameDto> findAllNames(){
+        return categoryRepository.findAll().stream().map(categoryMapper::mapEntityToNameDto).collect(Collectors.toSet());
+    }
 
     private Category getCategoryById(Long categoryId) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);

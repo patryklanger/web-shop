@@ -1,4 +1,4 @@
-<div *ngIf="category" class="card" style="width: 18rem">
+<div *ngIf="category" class="card" style="width: 18rem; cursor: pointer;" (click)="onCategoryClick()">
   <img class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" />
   <div class="card-body">
     <h3 class="card-title">{{ category.name }}</h3>

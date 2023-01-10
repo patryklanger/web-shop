@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.category.CategoryDto;
 import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
+import pl.langer.productService.dto.category.CategoryNameDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
 import pl.langer.productService.service.CategoryService;
 
@@ -18,7 +19,10 @@ import java.util.Set;
 @RequestMapping(path="api/products/category")
 public class CategoryController {
     private final CategoryService categoryService;
-
+    @GetMapping("/short")
+    public ResponseEntity<Set<CategoryNameDto>> getAllCategoriesName() {
+        return new ResponseEntity<>(categoryService.findAllNames(), HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<FindResultDto<CategoryDto>> getAllCategories(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10")Long limit){

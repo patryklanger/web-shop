@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
 import { Product } from 'src/app/core/models/product/product.model';
-import { BehaviorSubject, Subject, switchMap, tap, takeUntil, Observable } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, tap, takeUntil, Observable, ReplaySubject, combineLatest, map, filter, distinctUntilChanged } from 'rxjs';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
 
 @Component({
   selector: 'app-product-list',
@@ -12,37 +14,44 @@ import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   products?: Product[];
-  pagesNumber = 0;
+  totalCount = 0;
 
-  private readonly currentPage$ = new BehaviorSubject(0);
+  readonly currentPage$ = new BehaviorSubject(0);
+  readonly currentPageSize$ = new BehaviorSubject(10);
+  readonly categoryId$ = new BehaviorSubject<string | undefined>(undefined);
   private readonly _destroy$ = new Subject<void>()
 
-  constructor(private productGateway: ProductGatewayService, private cdr: ChangeDetectorRef) {}
+  constructor(private productGateway: ProductGatewayService, private cdr: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {}
 
   ngOnDestroy() {
+    this.currentPage$.complete();
+    this.categoryId$.complete();
+    this.currentPageSize$.complete();
+
     this._destroy$.next();
     this._destroy$.complete()
   }
 
   ngOnInit() {
-    this.currentPage$.pipe(
-      switchMap((currentPage) => this.currentPageProducts$(currentPage)),
+    combineLatest([
+      this.currentPage$.pipe(distinctUntilChanged()),
+      this.currentPageSize$.pipe(distinctUntilChanged()),
+      this.categoryId$.pipe(distinctUntilChanged())]).pipe(
+        switchMap(([currentPage, currentPageSize, categoryId]) => this.currentPageProducts$(currentPage, currentPageSize, categoryId)),
+        takeUntil(this._destroy$)
+      ).subscribe()
+
+    this.activatedRoute.queryParamMap.pipe(
+      map(paramMap => paramMap.get("categoryId")),
+      tap(id => this.categoryId$.next(id!)),
       takeUntil(this._destroy$)
     ).subscribe()
   }
 
-  nextPage() {
-    this.currentPage$.next(this.currentPage$.getValue() + 1);
-  }
-
-  previousPage() {
-    this.currentPage$.next(this.currentPage$.getValue() - 1);
-  }
-
-  private currentPageProducts$(currentPage: number): Observable<PaginatedResult<Product>> {
-    return this.productGateway.getProducts$(currentPage).pipe(
+  private currentPageProducts$(currentPage: number, currentPageSize: number, categoryId?: string): Observable<PaginatedResult<Product>> {
+    return this.productGateway.getProducts$(currentPage, currentPageSize, categoryId).pipe(
       tap(products => this.products = products.results),
-      tap(products => this.pagesNumber = products.totalCount / products.count),
+      tap(products => this.totalCount = products.totalCount),
       tap(() => this.cdr.markForCheck()),
     )
   }

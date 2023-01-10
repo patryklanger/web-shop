@@ -1,6 +1,13 @@
+<div class="categories-list">
 <div *ngIf="categories" class="categories-list__container">
   <app-category-card
     *ngFor="let category of categories"
     [category]="category"
   ></app-category-card>
+</div>
+<app-paginator class="categories-list__paginator"
+[page$]="currentPage$"
+[pageSize$]="currentPageSize$"
+[totalCount]="totalCount"
+></app-paginator>
 </div>

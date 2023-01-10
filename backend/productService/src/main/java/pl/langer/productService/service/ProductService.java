@@ -6,11 +6,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.FindResultDto;
-import pl.langer.productService.dto.product.ProductCategoryDto;
-import pl.langer.productService.dto.product.ProductDto;
+import pl.langer.productService.dto.ParamsDto;
+import pl.langer.productService.dto.product.*;
 import pl.langer.productService.dto.SearchDto;
-import pl.langer.productService.dto.product.ProductPriceRequestDto;
-import pl.langer.productService.dto.product.ProductPriceResponseDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
 import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
@@ -39,10 +37,15 @@ public class ProductService {
     CategoryMapper categoryMapper;
     CategoryRepository categoryRepository;
 
-    public FindResultDto<ProductDto> findAll(SearchDto searchDto) {
+    public FindResultDto<ProductDto> findAll(SearchDto searchDto, ParamsDto paramsDto) {
         PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue());
+        Page<Product> products;
 
-        Page<Product> products = productRepository.findAll(pageRequest);
+        if (paramsDto.getCategoryId() != null) {
+            products = productRepository.findByCategories_Id(paramsDto.getCategoryId(),pageRequest);
+        } else {
+            products = productRepository.findAll(pageRequest);
+        }
 
         return FindResultDto.<ProductDto>builder()
                 .count((long) products.getNumberOfElements())
@@ -136,6 +139,15 @@ public class ProductService {
         } catch(Exception e) {
             throw new ImageUploadException();
         }
+    }
+
+    public ProductDto createProduct(CreateProductDto object) {
+        if(object == null) {
+            throw new NullPointerException("Object cannot be null!");
+        }
+        Product product = productMapper.mapCreateDtoToEntity(object);
+        Product p = productRepository.save(product);
+        return productMapper.mapEntityToDto(p);
     }
 
     public ProductDto save(ProductDto object) {

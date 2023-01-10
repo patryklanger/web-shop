@@ -3,6 +3,7 @@ package pl.langer.authservice.config;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
@@ -12,7 +13,8 @@ public class KeycloakConfig {
 
     static Keycloak keycloak = null;
 
-    public final static String serverUrl = "http://localhost:28080/auth";
+
+    public final static String serverUrl = "http://keycloak:8080/auth";
     public final static String realm = "web-shop";
     public final static String clientId = "keycloak-admin";
     public final static String clientSecret = "c6423687-0a7b-49eb-b9dd-99f25b3936b3";
