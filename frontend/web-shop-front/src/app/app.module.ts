@@ -10,11 +10,13 @@ import { CoreModule } from './core/core.module';
 import { httpInterceptorProviders } from './core/http-interceptors';
 import { SharedModule } from './shared/shared.module';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

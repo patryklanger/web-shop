@@ -34,6 +34,8 @@ public class Category {
     @ManyToMany(mappedBy = "categories", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 
     private Set<Product> products  = new HashSet<>();
+
+    private Boolean isDeleted = false;
     public void removeProduct(Product product) {
         this.products.remove(product);
     }

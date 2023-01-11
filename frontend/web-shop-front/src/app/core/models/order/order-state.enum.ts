@@ -1,0 +1,3 @@
+export enum OrderState {
+  INITIALIZED, ACCEPTED, SENT, FINISHED, DELETED
+}

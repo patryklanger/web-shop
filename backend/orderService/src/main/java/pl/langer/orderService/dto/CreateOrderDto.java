@@ -14,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 public class CreateOrderDto {
-    private Set<BasketElementDto> basket;
+    private Set<BasketPriceRequetDto> basket;
 
     @NotBlank(message = "City is mandatory")
     private String city;

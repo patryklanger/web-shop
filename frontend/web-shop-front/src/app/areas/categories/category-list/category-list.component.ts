@@ -4,6 +4,7 @@ import { BehaviorSubject, combineLatest, distinctUntilChanged, Observable, Subje
 import { CategoryGatewayService } from 'src/app/core/gateways/categories/category-gateway.service';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
 import { Category } from 'src/app/core/models/product/category.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-list',
@@ -19,7 +20,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   readonly currentPageSize$ = new BehaviorSubject(10);
   private readonly _destroy$ = new Subject<void>()
 
-  constructor(private categoryGateway: CategoryGatewayService, private cdr: ChangeDetectorRef) {}
+  constructor(private categoryGateway: CategoryGatewayService, private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnDestroy() {
     this.currentPage$.complete();
@@ -36,6 +37,10 @@ export class CategoryListComponent implements OnInit, OnDestroy {
         switchMap(([currentPage, currentPageSize]) => this.currentPageCategories$(currentPage, currentPageSize)),
         takeUntil(this._destroy$)
       ).subscribe()
+  }
+
+  goToAddCategory() {
+    this.router.navigateByUrl("/categories/add")
   }
 
   private currentPageCategories$(currentPage: number, currentPageSize: number): Observable<PaginatedResult<Category>> {

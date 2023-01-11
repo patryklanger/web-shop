@@ -1,5 +1,9 @@
-
 <div *ngIf="categories; else loading" class="categories-list">
+  <div class="categories-list__toolbar">
+    <button mat-mini-fab color="accent" (click)="goToAddCategory()">
+      <mat-icon>add_circle</mat-icon>
+    </button>
+  </div>
 <div class="categories-list__container">
   <app-category-card
     *ngFor="let category of categories"

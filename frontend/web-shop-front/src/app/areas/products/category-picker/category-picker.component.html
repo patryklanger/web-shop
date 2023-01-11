@@ -10,7 +10,7 @@
 <button mat-mini-fab class="category-picker__button" color="primary" (click)="removeCategory()">
   <mat-icon>delete</mat-icon>
 </button>
-<button mat-mini-fab class="category-picker__button" color="accent" (click)="goToAddProduct()">
+<button *ngIf="isAdmin" mat-mini-fab class="category-picker__button" color="accent" (click)="goToAddProduct()">
   <mat-icon>add_circle</mat-icon>
 </button>
 </div>

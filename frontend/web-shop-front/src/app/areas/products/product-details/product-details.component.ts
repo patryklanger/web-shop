@@ -9,6 +9,8 @@ import { UploadImageDialogComponent } from 'src/app/shared/upload-image-dialog/u
 import { uploadImageDialogConfig } from 'src/app/shared/upload-image-dialog/upload-image-dialog.config';
 import { AddTagsDialogComponent } from 'src/app/shared/add-tags-dialog/add-tags-dialog.component';
 import { addTagsDialogConfig } from 'src/app/shared/add-tags-dialog/add-tags-dialog.config';
+import { UserState } from 'src/app/core/state/user';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: 'app-product-details',
@@ -17,11 +19,12 @@ import { addTagsDialogConfig } from 'src/app/shared/add-tags-dialog/add-tags-dia
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: Product;
+  isAdmin = false;
 
   private readonly _destroy$ = new Subject<void>();
   readonly productChanged$ = new Subject<Product>();
 
-  constructor(public dialog: MatDialog, private activatedRoute: ActivatedRoute, private productGateway: ProductGatewayService, private router: Router) {}
+  constructor(public dialog: MatDialog, private activatedRoute: ActivatedRoute, private productGateway: ProductGatewayService, private router: Router, private store: Store) {}
 
   ngOnDestroy() {
     this.productChanged$.complete();
@@ -62,6 +65,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       tap(product => this.product = product),
       takeUntil(this._destroy$))
       .subscribe();
+
+    this.store.select(UserState.roles).pipe(
+      tap(roles => this.isAdmin = roles?.includes("admin")),
+      takeUntil(this._destroy$)
+    ).subscribe()
   }
 
   edit() {

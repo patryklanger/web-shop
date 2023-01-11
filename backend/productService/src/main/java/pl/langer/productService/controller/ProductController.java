@@ -37,6 +37,10 @@ public class ProductController {
         return new ResponseEntity<>(productService.findAll(searchDto, paramsDto), HttpStatus.OK);
 
     }
+    @PostMapping("/list")
+    public ResponseEntity<List<ProductDto>> getProductList(@RequestBody Set<Long> ids) {
+        return new ResponseEntity<>(productService.findList(ids), HttpStatus.OK);
+    }
 
     @PostMapping("/buy")
     public ResponseEntity<List<ProductPriceResponseDto>> getPriceAndDecreaseStockAmount(@RequestBody List<ProductPriceRequestDto> productPriceRequestDtos) {

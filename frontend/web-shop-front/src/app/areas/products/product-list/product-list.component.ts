@@ -5,6 +5,8 @@ import { BehaviorSubject, Subject, switchMap, tap, takeUntil, Observable, Replay
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
+import { Store } from '@ngxs/store';
+import { UserState } from 'src/app/core/state/user';
 
 @Component({
   selector: 'app-product-list',
@@ -44,6 +46,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParamMap.pipe(
       map(paramMap => paramMap.get("categoryId")),
       tap(id => this.categoryId$.next(id!)),
+      tap(() => this.cdr.markForCheck()),
       takeUntil(this._destroy$)
     ).subscribe()
   }

@@ -5,11 +5,19 @@ import { Observable } from 'rxjs';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
 import { Category, CategoryShort } from '../../models/product/category.model';
 import { HttpParams } from '@angular/common/http';
+import { CategoryFormData } from 'src/app/areas/categories/category-form/category.form-data.model';
+import { ImageGatewayService } from '../abstract-image.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryGatewayService extends AbstractGatewayService {
+export class CategoryGatewayService extends AbstractGatewayService implements ImageGatewayService<Category>{
+
+  uploadImage$(image: File, objectId: number): Observable<Category> {
+    const formData = new FormData();
+    formData.append("image", image);
+    return this.post$(`category/${objectId}/image`, formData);
+  }
 
   getCategories$(page = 0, limit = 10): Observable<PaginatedResult<Category>> {
     const params = new HttpParams({
@@ -18,19 +26,34 @@ export class CategoryGatewayService extends AbstractGatewayService {
         limit: limit
       }
     })
-    return this.get$("category", params)
+    return this.get$("", params)
+  }
+
+  createCategory$(data: CategoryFormData): Observable<Category> {
+    return this.post$("", data)
+  }
+
+  editCategory$(id: number, data: CategoryFormData) {
+    return this.put$(`${id}`, data)
+  }
+
+  deleteCategory$(categoryId: number): Observable<unknown> {
+    return this.delete$(`${categoryId}`)
   }
 
   getCategoriesShort$(): Observable<CategoryShort[]> {
-    return this.get$("category/short")
+    return this.get$("short")
   }
 
+  getCategory$(id: number): Observable<Category> {
+    return this.get$(`${id}`);
+  }
 
   protected getBaseUrl(): string {
     return `${environment.apiEndpoint}/${this.getResourceName()}`
   }
   protected getResourceName(): string {
-    return 'products';
+    return 'products/category/';
   }
 
 

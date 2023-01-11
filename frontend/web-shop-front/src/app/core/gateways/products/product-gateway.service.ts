@@ -18,6 +18,10 @@ export class ProductGatewayService extends AbstractGatewayService implements Ima
     return this.post$(`/product/${objectId}/tag`, tags);
   }
 
+  getProductList$(ids: number[]): Observable<Product[]> {
+    return this.post$(`product/list`, ids);
+  }
+
   uploadImage$(image: File, objectId: number): Observable<Product> {
     const formData = new FormData();
     formData.append("image", image);

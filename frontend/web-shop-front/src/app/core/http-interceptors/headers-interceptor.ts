@@ -6,6 +6,7 @@ import { catchError, filter, Observable, of, Subject, switchMap, takeUntil, tap,
 import { UserState } from "../state/user";
 import { environment } from '../../../environments/environment.prod';
 import { UserActions } from 'src/app/core/state/user';
+import { NotificationService } from 'src/app/shared/notification/notification.service';
 
 @Injectable()
 export class HeadersInterceptor implements HttpInterceptor, OnDestroy {
@@ -15,7 +16,7 @@ export class HeadersInterceptor implements HttpInterceptor, OnDestroy {
 
   private readonly _destroy$ = new Subject<void>()
 
-  constructor(private store: Store) {
+  constructor(private store: Store, private notificationService: NotificationService) {
     this.store.select(UserState.accessToken).pipe(tap(token => this.accessToken = token === null ? undefined : token), takeUntil(this._destroy$)).subscribe()
   }
   ngOnDestroy() {
@@ -32,6 +33,8 @@ export class HeadersInterceptor implements HttpInterceptor, OnDestroy {
       return next.handle(authReq).pipe(catchError(error => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
           return this.handle401Error(authReq, next);
+        } else if (error instanceof HttpErrorResponse) {
+          this.notificationService.showWarnNotification(error.error);
         }
         return throwError(() => error)
       }))

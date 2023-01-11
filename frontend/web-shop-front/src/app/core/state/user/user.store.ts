@@ -2,7 +2,7 @@ import jwt_decode from 'jwt-decode';
 import { Injectable, OnDestroy } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError, mergeMap, of, Subject, takeUntil } from "rxjs";
+import { catchError, mergeMap, of, Subject, takeUntil, tap } from "rxjs";
 
 import * as UserActions from "./user.actions";
 import { NotificationService } from "../../../shared/notification/notification.service";
@@ -138,7 +138,6 @@ export class UserState implements OnDestroy {
       catchError((e: HttpErrorResponse) => of(ctx.dispatch(new UserActions.Logout()))),
       takeUntil(this._destroy$)
     ).subscribe()
-
   }
 
   @Action(UserActions.Restore)

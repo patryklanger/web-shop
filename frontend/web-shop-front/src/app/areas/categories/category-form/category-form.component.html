@@ -1,0 +1,16 @@
+<form *ngIf="formGroup" #formDirective="ngForm" (submit)="onSubmit(formDirective)"   class="category-form__form" [formGroup]="formGroup">
+  <mat-form-field class="category-form__field" appearance="fill">
+    <mat-label>Name</mat-label>
+    <input formControlName="name" matInput />
+    <mat-error [appError]="nameError"></mat-error>
+  </mat-form-field>
+  <mat-form-field class="category-form__field" appearance="fill">
+    <mat-label>Description</mat-label>
+    <input formControlName="description" matInput />
+  </mat-form-field>
+  <div class="category-form__button-container">
+    <button type="submit" mat-raised-button>Submit</button>
+    <button *ngIf="isEditing()" (click)="openAddImageDialog() "type="button" mat-raised-button>Upload photo</button>
+    <button *ngIf="isEditing()" (click)="deleteCategory()" type="button" mat-raised-button color="warn">Delete</button>
+  </div>
+</form>

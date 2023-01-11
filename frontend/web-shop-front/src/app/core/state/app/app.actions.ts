@@ -23,3 +23,7 @@ export class EmptyCart {
 export class RestoreCart {
   static readonly type = `${ACTION_PREFIX} Restore cart`
 }
+
+export class RefreshCart {
+  static readonly type = `${ACTION_PREFIX} Refresh cart`
+}

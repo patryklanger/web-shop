@@ -11,7 +11,6 @@ import pl.langer.productService.dto.FindResultDto;
 import pl.langer.productService.dto.SearchDto;
 import pl.langer.productService.dto.category.CategoryNameDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
-import pl.langer.productService.dto.product.ProductDto;
 import pl.langer.productService.exception.CategoryNotFoundException;
 import pl.langer.productService.exception.ImageUploadException;
 import pl.langer.productService.exception.ProductNotFoundException;
@@ -37,11 +36,11 @@ public class CategoryService {
     ProductMapper productMapper;
 
     public List<CategoryNameDto> findAllNames(){
-        return categoryRepository.findAll(Sort.by("id").descending()).stream().map(categoryMapper::mapEntityToNameDto).collect(Collectors.toList());
+        return categoryRepository.findAllByIsDeletedFalse(Sort.by("id").descending()).stream().map(categoryMapper::mapEntityToNameDto).collect(Collectors.toList());
     }
 
     private Category getCategoryById(Long categoryId) {
-        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        Optional<Category> categoryOptional = categoryRepository.findByIdAndIsDeletedFalse(categoryId);
 
         if (!categoryOptional.isPresent()) {
             throw new CategoryNotFoundException("Category not found!");
@@ -52,7 +51,7 @@ public class CategoryService {
     public FindResultDto<CategoryDto> findAll(SearchDto searchDto) {
         PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
 
-        Page<Category> categories = categoryRepository.findAll(pageRequest);
+        Page<Category> categories = categoryRepository.findAllByIsDeletedFalse(pageRequest);
 
         return FindResultDto.<CategoryDto>builder()
                 .count((long) categories.getNumberOfElements())
@@ -76,7 +75,7 @@ public class CategoryService {
     }
 
     public CategoryDto findById(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
+        Optional<Category> category = categoryRepository.findByIdAndIsDeletedFalse(id);
         if (category.isPresent()) {
             return categoryMapper.mapEntityToDto(category.get());
         } else {
@@ -123,7 +122,13 @@ public class CategoryService {
 
     @Transactional
     public void deleteById(Long id) {
-        findById(id);
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException("Category not found!"));
+        category.getProducts().forEach(p->{
+            var cat = p.getCategories().stream().filter(c->c.getId()!=category.getId()).collect(Collectors.toSet());
+            p.setCategories(cat);
+            productRepository.save(p);
+        });
+        category.setIsDeleted(true);
+        categoryRepository.save(category);
     }
 }

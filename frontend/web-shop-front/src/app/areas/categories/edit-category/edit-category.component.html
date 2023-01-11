@@ -1,0 +1,4 @@
+<div class="edit-category__container">
+  <h2>Edit category</h2>
+  <app-category-form *ngIf="category" [formData]="formData" [type]="type" (formDataSubmit)="onSubmit($event)"></app-category-form>
+</div>

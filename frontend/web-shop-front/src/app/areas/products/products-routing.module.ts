@@ -6,13 +6,13 @@ import { ProductFormComponent } from './product-form/product-form.component';
 import { AddProductComponent } from './add-product/add-product.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { EditProductComponent } from './edit-product/edit-product.component';
+import { AdminGuard } from 'src/app/shared/guards/admin.guard';
 
 const routes: Routes = [
   { path: "", component: ProductListComponent },
-  { path: "form", component: ProductFormComponent },
-  { path: "add", component: AddProductComponent },
+  { path: "add", component: AddProductComponent, canActivate: [AdminGuard] },
   { path: "details/:id", component: ProductDetailsComponent, pathMatch: "full" },
-  { path: "edit/:id", component: EditProductComponent, pathMatch: "full" }
+  { path: "edit/:id", component: EditProductComponent, pathMatch: "full", canActivate: [AdminGuard] }
 ];
 
 @NgModule({

@@ -1,0 +1,37 @@
+
+<div class="order-form__container">
+<form *ngIf="formGroup" (submit)="onSubmit()" class="order-form__form" [formGroup]="formGroup">
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>City</mat-label>
+    <input formControlName="city" matInput />
+    <mat-error [appError]="cityError"></mat-error>
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>Street</mat-label>
+    <input formControlName="street" matInput />
+    <mat-error [appError]="streetError"></mat-error>
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>Building no.</mat-label>
+    <input formControlName="buildingNumber" matInput />
+    <mat-error [appError]="buildingNumberError"></mat-error>
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>Apartment no.</mat-label>
+    <input formControlName="apartmentNumber" matInput />
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>Country</mat-label>
+    <input formControlName="country" matInput />
+    <mat-error [appError]="countryError"></mat-error>
+  </mat-form-field>
+  <mat-form-field class="order-form__field" appearance="fill">
+    <mat-label>Phone no.</mat-label>
+    <input formControlName="phoneNumber" matInput />
+    <mat-error [appError]="phoneNumberError"></mat-error>
+  </mat-form-field>
+  <div class="order-form__button-container">
+    <button type="submit" mat-raised-button>Submit</button>
+  </div>
+</form>
+</div>

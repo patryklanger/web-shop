@@ -54,7 +54,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule
 
   ],
-  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective, LoadingSpinnerComponent]
+  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective, LoadingSpinnerComponent, AddTagsDialogComponent]
 
 })
 export class SharedModule {}

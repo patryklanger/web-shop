@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject, tap, BehaviorSubject, takeUntil } from 'rxjs';
+import { Subject, tap, BehaviorSubject, takeUntil, distinctUntilChanged } from 'rxjs';
 import { FormControl } from '@angular/forms';
 
 
 import { CategoryGatewayService } from 'src/app/core/gateways/categories/category-gateway.service';
 import { CategoryShort } from 'src/app/core/models/product/category.model';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { UserState } from 'src/app/core/state/user';
 
 @Component({
   selector: 'app-category-picker',
@@ -16,23 +18,30 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
   @Input() currentCategory?: BehaviorSubject<string | undefined>;
   shortCategories: CategoryShort[] = [];
   categoryCtrl = new FormControl();
+  isAdmin = false;
 
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private categoryGateway: CategoryGatewayService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private categoryGateway: CategoryGatewayService, private router: Router, private activatedRoute: ActivatedRoute, private store: Store) {
   }
 
   ngOnInit() {
-    this.categoryCtrl.setValue(+this.currentCategory.getValue())
     this.categoryGateway.getCategoriesShort$().pipe(
       tap(categories => this.shortCategories = categories),
+      tap(() => this.categoryCtrl.setValue(+this.currentCategory.getValue())),
       takeUntil(this._destroy$)
     ).subscribe()
 
     this.categoryCtrl.valueChanges.pipe(
-      tap(value => this.setCurrentCategoryParam(value)),
+      tap(value => this.setCurrentCategoryParam(value ? value : undefined)),
       takeUntil(this._destroy$)
     ).subscribe()
+
+    this.store.select(UserState.roles).pipe(
+      tap(roles => this.isAdmin = roles?.includes("admin")),
+      takeUntil(this._destroy$)
+    ).subscribe()
+
   }
 
   ngOnDestroy() {

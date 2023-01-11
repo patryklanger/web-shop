@@ -1,10 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable, OnDestroy } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { Product } from "../../models/product/product.model";
 
 import * as AppActions from "./app.actions";
 import { CacheService } from '../../../shared/cache/cache.service';
 import { NotificationService } from '../../../shared/notification/notification.service';
+import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
+import { Subject, tap, takeUntil } from 'rxjs';
 
 export interface CartElement {
   product: Product;
@@ -23,8 +25,16 @@ export interface AppStateModel {
   }
 })
 @Injectable()
-export class AppState {
-  constructor(private cacheService: CacheService, private notificationService: NotificationService) {}
+export class AppState implements OnDestroy {
+  private readonly _destroy$ = new Subject<void>()
+
+  constructor(private cacheService: CacheService, private notificationService: NotificationService, private productGateway: ProductGatewayService) {}
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+  }
+
   @Selector()
   static menuState(state: AppStateModel): boolean {
     return state.menuState
@@ -103,5 +113,25 @@ export class AppState {
     patchState({ cart: [] })
 
     this.notificationService.showSuccessNotification("Cart is now empty")
+  }
+
+  @Action(AppActions.RefreshCart)
+  refreshCart({ getState, patchState }: StateContext<AppStateModel>) {
+    const { cart } = getState();
+    const productIds = cart.map(e => e.product.id);
+    this.productGateway.getProductList$(productIds).pipe(
+      tap((products) => {
+        console.log(products);
+        const newCart: CartElement[] = [];
+        cart.forEach((element) => {
+          const product = products.find(p => p.id === element.product.id);
+          if (!!product) {
+            newCart.push({ product, quantity: element.quantity })
+          }
+          patchState({ cart: newCart })
+        })
+      }),
+      takeUntil(this._destroy$)
+    ).subscribe()
   }
 }

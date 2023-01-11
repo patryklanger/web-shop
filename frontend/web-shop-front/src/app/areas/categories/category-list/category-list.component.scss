@@ -13,4 +13,10 @@
   &__paginator {
     margin-top: 3rem;
   }
+  &__toolbar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
 }
