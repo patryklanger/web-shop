@@ -3,7 +3,7 @@ import { ProductGatewayService } from 'src/app/core/gateways/products/product-ga
 import { Product } from 'src/app/core/models/product/product.model';
 import { BehaviorSubject, Subject, switchMap, tap, takeUntil, Observable, ReplaySubject, combineLatest, map, filter, distinctUntilChanged } from 'rxjs';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment.prod';
 
 @Component({
@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment.prod';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  products?: Product[];
+  products: Product[];
   totalCount = 0;
 
   readonly currentPage$ = new BehaviorSubject(0);
@@ -21,7 +21,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   readonly categoryId$ = new BehaviorSubject<string | undefined>(undefined);
   private readonly _destroy$ = new Subject<void>()
 
-  constructor(private productGateway: ProductGatewayService, private cdr: ChangeDetectorRef, private activatedRoute: ActivatedRoute) {}
+  constructor(private productGateway: ProductGatewayService, private cdr: ChangeDetectorRef, private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnDestroy() {
     this.currentPage$.complete();
@@ -46,6 +46,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
       tap(id => this.categoryId$.next(id!)),
       takeUntil(this._destroy$)
     ).subscribe()
+  }
+
+  goToAddProduct() {
+    this.router.navigateByUrl('/products/add');
   }
 
   private currentPageProducts$(currentPage: number, currentPageSize: number, categoryId?: string): Observable<PaginatedResult<Product>> {

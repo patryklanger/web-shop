@@ -55,13 +55,6 @@ public class ProductController {
         return new ResponseEntity<>(productService.addTags(tags,id),HttpStatus.OK);
     }
 
-
-    @DeleteMapping("/{id}/tag")
-    public ResponseEntity<ProductDto> removeTagsFromProduct(@PathVariable Long id, @RequestBody Set<String> tags) {
-        return new ResponseEntity<>(productService.removeTags(tags,id),HttpStatus.OK);
-    }
-
-
     @PostMapping("/{id}/category")
     public ResponseEntity<ProductDto> addCategoriesToProduct(@PathVariable Long id, @RequestBody Set<Long> categoryIds) {
         return new ResponseEntity<>(productService.addCategoriesToProduct(id, categoryIds), HttpStatus.OK);

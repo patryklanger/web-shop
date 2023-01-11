@@ -12,6 +12,7 @@ import pl.langer.productService.dto.category.CategoryNameDto;
 import pl.langer.productService.dto.category.CategoryProductDto;
 import pl.langer.productService.service.CategoryService;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -20,7 +21,7 @@ import java.util.Set;
 public class CategoryController {
     private final CategoryService categoryService;
     @GetMapping("/short")
-    public ResponseEntity<Set<CategoryNameDto>> getAllCategoriesName() {
+    public ResponseEntity<List<CategoryNameDto>> getAllCategoriesName() {
         return new ResponseEntity<>(categoryService.findAllNames(), HttpStatus.OK);
     }
 

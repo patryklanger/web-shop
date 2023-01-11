@@ -23,6 +23,7 @@ mat-divider {
   object-fit: cover;
 }
 .card-img-top-container {
-  height: 300px;
-  width: 300px;
+  width: 100%;
+  aspect-ratio: 1 / 1 ;
+  overflow: hidden;
 }

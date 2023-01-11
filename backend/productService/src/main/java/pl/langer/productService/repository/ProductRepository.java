@@ -9,5 +9,6 @@ import pl.langer.productService.model.Product;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Page<Product> findByCategories_Id(Long id, Pageable pageable);
+    Page<Product> findByIsDeletedFalseAndCategories_Id(Long id, Pageable pageable);
+    Page<Product> findAllByIsDeletedFalse(Pageable pageable);
 }

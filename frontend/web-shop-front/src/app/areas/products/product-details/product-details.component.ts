@@ -5,6 +5,10 @@ import { Product } from 'src/app/core/models/product/product.model';
 import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddCategoriesDialogComponent } from '../add-categories-dialog/add-categories-dialog.component';
+import { UploadImageDialogComponent } from 'src/app/shared/upload-image-dialog/upload-image-dialog.component';
+import { uploadImageDialogConfig } from 'src/app/shared/upload-image-dialog/upload-image-dialog.config';
+import { AddTagsDialogComponent } from 'src/app/shared/add-tags-dialog/add-tags-dialog.component';
+import { addTagsDialogConfig } from 'src/app/shared/add-tags-dialog/add-tags-dialog.config';
 
 @Component({
   selector: 'app-product-details',
@@ -27,8 +31,21 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
   openAddCategoriesDialog() {
     const currentCategories = this.product.categories.map(cat => cat.id);
-    const dialogRef = this.dialog.open(AddCategoriesDialogComponent, {
+    this.dialog.open(AddCategoriesDialogComponent, {
       data: { id: this.product.id, current: currentCategories, product$: this.productChanged$ },
+    });
+  }
+  openAddImageDialog() {
+    this.dialog.open(UploadImageDialogComponent, {
+      ...uploadImageDialogConfig,
+      data: { id: this.product.id, service: this.productGateway, objectChanged$: this.productChanged$ },
+    });
+  }
+
+  openEditTagsDialog() {
+    this.dialog.open(AddTagsDialogComponent, {
+      ...addTagsDialogConfig,
+      data: { id: this.product.id, service: this.productGateway, objectChanged$: this.productChanged$, currentTags: this.product.tags },
     });
   }
 

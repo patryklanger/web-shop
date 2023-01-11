@@ -3,6 +3,7 @@ package pl.langer.productService.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.category.CategoryDto;
@@ -35,8 +36,8 @@ public class CategoryService {
     CategoryMapper categoryMapper;
     ProductMapper productMapper;
 
-    public Set<CategoryNameDto> findAllNames(){
-        return categoryRepository.findAll().stream().map(categoryMapper::mapEntityToNameDto).collect(Collectors.toSet());
+    public List<CategoryNameDto> findAllNames(){
+        return categoryRepository.findAll(Sort.by("id").descending()).stream().map(categoryMapper::mapEntityToNameDto).collect(Collectors.toList());
     }
 
     private Category getCategoryById(Long categoryId) {
@@ -49,7 +50,7 @@ public class CategoryService {
         return categoryOptional.get();
     }
     public FindResultDto<CategoryDto> findAll(SearchDto searchDto) {
-        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue());
+        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
 
         Page<Category> categories = categoryRepository.findAll(pageRequest);
 

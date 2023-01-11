@@ -1,19 +1,37 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
 import { FormType, InitialProductFormData, ProductFormData } from './product-form.model';
 import { FormGroup, FormBuilder, FormControl, Validators, ValidationErrors, FormGroupDirective } from '@angular/forms';
+import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
+import { Subject, tap, takeUntil } from 'rxjs';
+import { NotificationService } from 'src/app/shared/notification/notification.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss']
 })
-export class ProductFormComponent implements OnInit {
+export class ProductFormComponent implements OnInit, OnDestroy {
   @Input() type = FormType.CREATE
   @Input() formData: ProductFormData = InitialProductFormData;
   formGroup?: FormGroup;
   @Output() formDataSubmit: EventEmitter<ProductFormData> = new EventEmitter();
 
-  constructor(private fb: FormBuilder) {
+  private readonly _destroy$ = new Subject<void>();
+
+  constructor(private fb: FormBuilder, private productGateway: ProductGatewayService, private notificationService: NotificationService, private router: Router) {
+  }
+
+  isEditing(): boolean {
+    return this.type === FormType.EDIT;
+  }
+
+  deleteProduct() {
+    this.productGateway.deleteProduct$(this.formData.id).pipe(
+      tap(() => this.notificationService.showSuccessNotification("Product deleted")),
+      tap(() => this.router.navigateByUrl('/products')),
+      takeUntil(this._destroy$)
+    ).subscribe()
   }
 
   ngOnInit() {
@@ -23,6 +41,11 @@ export class ProductFormComponent implements OnInit {
       stockAmount: new FormControl(this.formData.stockAmount, [Validators.required, Validators.min(0)]),
       price: new FormControl(this.formData.price, [Validators.required, Validators.min(0.01)]),
     })
+  }
+
+  ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   get nameError(): ValidationErrors {

@@ -19,5 +19,8 @@
     <input formControlName="stockAmount" type="number" matInput />
     <mat-error [appError]="priceError"></mat-error>
   </mat-form-field>
-  <button mat-raised-button>Submit</button>
+  <div class="product-form__button-container">
+    <button type="submit" mat-raised-button>Submit</button>
+    <button *ngIf="isEditing()" (click)="deleteProduct()" type="button" mat-raised-button color="warn">Delete</button>
+  </div>
 </form>

@@ -1,5 +1,6 @@
-<div class="products-list">
+<div *ngIf="products; else loading" class="products-list">
   <app-category-picker [currentCategory]="categoryId$"></app-category-picker>
+
   <div *ngIf="products" class="products-list__container">
   <app-product-card
     *ngFor="let product of products"
@@ -13,3 +14,6 @@
 [totalCount]="totalCount"
 ></app-paginator>
 </div>
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

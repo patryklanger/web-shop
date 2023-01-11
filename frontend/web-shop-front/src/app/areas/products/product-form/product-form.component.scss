@@ -7,4 +7,9 @@
   &__field{
     width: 20rem;
   }
+  &__button-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 }

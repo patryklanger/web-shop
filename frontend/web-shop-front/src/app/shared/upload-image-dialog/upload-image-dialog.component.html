@@ -1,0 +1,9 @@
+<div class="file-upload__container">
+  <h3 class="file-upload__heading">Upload image</h3>
+  <form class="file-upload__form" (submit)="onSubmit()">
+    <file-upload style="width: 100%" [control]="fileCtrl" [multiple]="false" [animation]="true"
+    accept="image/*"></file-upload>
+    <button mat-raised-button>Send</button>
+  </form>
+</div>
+

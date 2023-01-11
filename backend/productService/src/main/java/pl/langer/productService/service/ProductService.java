@@ -3,6 +3,7 @@ package pl.langer.productService.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pl.langer.productService.dto.FindResultDto;
@@ -38,19 +39,18 @@ public class ProductService {
     CategoryRepository categoryRepository;
 
     public FindResultDto<ProductDto> findAll(SearchDto searchDto, ParamsDto paramsDto) {
-        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue());
+        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
         Page<Product> products;
 
         if (paramsDto.getCategoryId() != null) {
-            products = productRepository.findByCategories_Id(paramsDto.getCategoryId(),pageRequest);
+            products = productRepository.findByIsDeletedFalseAndCategories_Id(paramsDto.getCategoryId(),pageRequest);
         } else {
-            products = productRepository.findAll(pageRequest);
+            products = productRepository.findAllByIsDeletedFalse(pageRequest);
         }
 
         return FindResultDto.<ProductDto>builder()
                 .count((long) products.getNumberOfElements())
                 .results(products.getContent().stream()
-                        .filter(p->!p.getIsDeleted())
                         .map(productMapper::mapEntityToDto)
                         .collect(Collectors.toList()))
                 .startElement(pageRequest.getOffset())
@@ -97,15 +97,8 @@ public class ProductService {
      public ProductDto addTags(Set<String> list, Long id){
         ProductDto productDto = findById(id);
         Product product = productMapper.mapDtoToEntity(productDto);
-        list.forEach(product::addTag);
+        product.setTags(list);
         return save(productMapper.mapEntityToDto(product));
-     }
-
-     public ProductDto removeTags(Set<String> list, Long id) {
-         ProductDto productDto = findById(id);
-         Product product = productMapper.mapDtoToEntity(productDto);
-         list.forEach(product::removeTag);
-         return save(productMapper.mapEntityToDto(product));
      }
 
     public ProductDto findById(Long id) {

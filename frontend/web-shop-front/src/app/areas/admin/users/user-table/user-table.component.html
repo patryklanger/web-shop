@@ -1,4 +1,4 @@
-<div *ngIf="users">
+<div *ngIf="users; else loading">
   <table
     mat-table
     [dataSource]="users"
@@ -76,3 +76,6 @@
     </button>
   </div>
 </div>
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

@@ -15,6 +15,14 @@ import { SideMenuComponent } from './side-menu/side-menu.component';
 import { RouterModule } from '@angular/router';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { ValidationErrorDirective } from './validation-error.directive';
+import { LoadingSpinnerComponent } from './loading-spinner/loading-spinner.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { UploadImageDialogComponent } from './upload-image-dialog/upload-image-dialog.component';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { AddTagsDialogComponent } from './add-tags-dialog/add-tags-dialog.component';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @NgModule({
   declarations: [
@@ -22,7 +30,10 @@ import { ValidationErrorDirective } from './validation-error.directive';
     DrawerComponent,
     SideMenuComponent,
     PaginatorComponent,
-    ValidationErrorDirective
+    ValidationErrorDirective,
+    LoadingSpinnerComponent,
+    UploadImageDialogComponent,
+    AddTagsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -34,10 +45,16 @@ import { ValidationErrorDirective } from './validation-error.directive';
     MatListModule,
     RouterModule,
     MatBadgeModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
+    FileUploadModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatChipsModule,
+    MatFormFieldModule
 
   ],
-  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective]
+  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective, LoadingSpinnerComponent]
 
 })
 export class SharedModule {}

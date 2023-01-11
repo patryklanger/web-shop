@@ -4,6 +4,7 @@ import { UserTableComponent } from './user-table/user-table.component';
 import { UsersRoutingModule } from './users-routing.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { SharedModule } from '../../../shared/shared.module';
 
 
 
@@ -15,7 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
     CommonModule,
     UsersRoutingModule,
     MatTableModule,
-    MatButtonModule
+    MatButtonModule,
+    SharedModule
   ]
 })
 export class UsersModule {}

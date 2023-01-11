@@ -1,9 +1,11 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject, tap, BehaviorSubject } from 'rxjs';
+import { Subject, tap, BehaviorSubject, takeUntil } from 'rxjs';
+import { FormControl } from '@angular/forms';
+
+
 import { CategoryGatewayService } from 'src/app/core/gateways/categories/category-gateway.service';
 import { CategoryShort } from 'src/app/core/models/product/category.model';
-import { takeUntil } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-picker',
@@ -17,7 +19,7 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
 
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private categoryGateway: CategoryGatewayService) {
+  constructor(private categoryGateway: CategoryGatewayService, private router: Router, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -28,7 +30,7 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
     ).subscribe()
 
     this.categoryCtrl.valueChanges.pipe(
-      tap(value => this.currentCategory!.next(value)),
+      tap(value => this.setCurrentCategoryParam(value)),
       takeUntil(this._destroy$)
     ).subscribe()
   }
@@ -38,9 +40,25 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
+  goToAddProduct() {
+    this.router.navigateByUrl('/products/add');
+  }
+
   removeCategory() {
     this.categoryCtrl.setValue(null);
     this.currentCategory!.next(undefined);
+  }
+
+  private setCurrentCategoryParam(categoryId: number) {
+    const queryParams: Params = { categoryId: categoryId };
+
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.activatedRoute,
+        queryParams: queryParams,
+        queryParamsHandling: 'merge',
+      });
   }
 
 }

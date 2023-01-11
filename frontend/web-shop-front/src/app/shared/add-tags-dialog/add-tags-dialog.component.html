@@ -1,0 +1,23 @@
+<div class="add-tags-dialog__container">
+  <h3>Add tags</h3>
+<mat-form-field class="add-tags-dialog__field" appearance="fill">
+  <mat-label>Tags</mat-label>
+  <mat-chip-list #chipList>
+    <mat-chip
+      *ngFor="let tag of tags"
+      (removed)="tags.delete(tag)">
+      {{tag}}
+      <button matChipRemove>
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+    <input
+      placeholder="New tag..."
+      [formControl]="tagCtrl"
+      [matChipInputFor]="chipList"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+</mat-form-field>
+<button mat-raised-button (click)="onSubmit()">Submit</button>
+</div>
