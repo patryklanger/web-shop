@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.langer.orderService.dto.CreateOrderDto;
-import pl.langer.orderService.dto.FindResultDto;
-import pl.langer.orderService.dto.OrderDto;
-import pl.langer.orderService.dto.SearchDto;
+import pl.langer.orderService.dto.*;
 import pl.langer.orderService.model.OrderState;
 import pl.langer.orderService.service.OrderService;
 
@@ -42,8 +39,8 @@ public class OrderController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<OrderDto> changeOrderStauts(@PathVariable Long id, @RequestBody OrderState orderState) {
-        return new ResponseEntity<>(orderService.changeStauts(id,orderState),HttpStatus.OK);
+    public ResponseEntity<OrderDto> changeOrderStauts(@PathVariable Long id, @RequestBody ChangeStateDto changeStateDto) {
+        return new ResponseEntity<>(orderService.changeStauts(id,changeStateDto),HttpStatus.OK);
     }
 
     @PostMapping("/{id}/pay")

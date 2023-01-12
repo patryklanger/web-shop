@@ -3,11 +3,9 @@ package pl.langer.orderService.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pl.langer.orderService.dto.CreateOrderDto;
-import pl.langer.orderService.dto.FindResultDto;
-import pl.langer.orderService.dto.OrderDto;
-import pl.langer.orderService.dto.SearchDto;
+import pl.langer.orderService.dto.*;
 import pl.langer.orderService.exception.OrderNotFoundException;
 import pl.langer.orderService.mapper.BasketElementMapper;
 import pl.langer.orderService.mapper.OrderMapper;
@@ -31,7 +29,7 @@ public class OrderService {
     RestService restService;
 
     public FindResultDto<OrderDto> findAll(SearchDto searchDto) {
-        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue());
+        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
 
         Page<Order> orders = orderRepository.findAll(pageRequest);
 
@@ -71,9 +69,9 @@ public class OrderService {
         return orderMapper.mapEntityToDto(o);
     }
 
-    public OrderDto changeStauts(Long id, OrderState status) {
+    public OrderDto changeStauts(Long id, ChangeStateDto changeStateDto) {
         var order = orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order not found!"));
-        order.setOrderState(status);
+        order.setOrderState(changeStateDto.getState());
         return orderMapper.mapEntityToDto(orderRepository.save(order));
     }
 
