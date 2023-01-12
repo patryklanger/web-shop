@@ -30,10 +30,6 @@ services:
   web-shop-product-service:
     image: patryklanger/product-service:latest
     container_name: productService
-    ports:
-      - 8082:8082
-    expose:
-      - 8082
     environment:
       - spring.datasource.url=jdbc:postgresql://productDatabase:5432/${PRODUCT_SERVICE_POSTGRESQL_DB}
       - spring.datasource.username=${PRODUCT_SERVICE_POSTGRESQL_USER}
@@ -52,8 +48,6 @@ services:
       POSTGRES_DB: ${PRODUCT_SERVICE_POSTGRESQL_DB}
       POSTGRES_USER: ${PRODUCT_SERVICE_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${PRODUCT_SERVICE_POSTGRESQL_PASS}
-    ports:
-      - ${PRODUCT_SERVCIE_POSTGRES_PORT}:5432
 
   user-database:
     image: postgres:latest
@@ -62,14 +56,10 @@ services:
       POSTGRES_DB: ${AUTH_SERVICE_POSTGRESQL_DB}
       POSTGRES_USER: ${AUTH_SERVICE_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${AUTH_SERVICE_POSTGRESQL_PASS}
-    ports:
-      - ${AUTH_SERVICE_POSTGRESQL_PORT}:5432
 
   web-shop-discovery:
     image: patryklanger/web-shop-discovery:latest
     container_name: web-shop-discovery
-    ports:
-      - ${DISCOVERY_SERVICE_PORT}:8761
 
   api-gateway:
     image: patryklanger/web-shop-api-gateway:latest
@@ -95,14 +85,10 @@ services:
       POSTGRES_DB: ${ORDER_SERVICE_POSTGRESQL_DB}
       POSTGRES_USER: ${ORDER_SERVICE_POSTGRESQL_USER}
       POSTGRES_PASSWORD: ${ORDER_SERVICE_POSTGRESQL_PASS}
-    ports:
-      - 5555:5432
 
   order-service:
     image: patryklanger/order-service:latest
     container_name: orderService
-    ports:
-      - 8090:8090
     environment:
       - spring.security.oauth2.client.registration.keycloak.client-id=auth-service
       - spring.security.oauth2.client.registration.keycloak.client-secret=1e62797d-9b5f-40e5-9a5e-89e0f1bab6b8
@@ -125,8 +111,6 @@ services:
   web-shop-auth-service:
     image: patryklanger/web-shop-auth-service:latest
     container_name: authService
-    ports:
-      - 8085:8085
     environment:
       - spring.datasource.url=jdbc:postgresql://userDatabase:5432/${AUTH_SERVICE_POSTGRESQL_DB}
       - spring.datasource.username=${AUTH_SERVICE_POSTGRESQL_USER}
@@ -140,3 +124,11 @@ services:
       - user-database
     links:
       - user-database
+
+  web-shop-front:
+    image: patryklanger/web-shop-front:latest
+    container_name: front
+    ports:
+      - 4200:80
+    expose:
+      - 4200
