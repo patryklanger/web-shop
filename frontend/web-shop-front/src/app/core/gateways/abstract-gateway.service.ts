@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -15,8 +15,8 @@ export abstract class AbstractGatewayService {
     return this.http.get(`${this.getBaseUrl()}/${url}`, { params: params }) as Observable<T>
   }
 
-  protected post$<T>(url: string, body?: any): Observable<T> {
-    return this.http.post(`${this.getBaseUrl()}/${url}`, body) as Observable<T>
+  protected post$<T>(url: string, body?: any, headers?: HttpHeaders): Observable<T> {
+    return this.http.post(`${this.getBaseUrl()}/${url}`, body, { headers: headers }) as Observable<T>
   }
 
   protected put$<T>(url: string, body: any): Observable<T> {

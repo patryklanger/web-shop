@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderFormComponent } from './order-form/order-form.component';
-import { ConfirmOrderComponent } from './confirm-order/confirm-order.component';
 import { PayOrderComponent } from './pay-order/pay-order.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,16 +14,21 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { OrderStateDialogComponent } from './order-state-dialog/order-state-dialog.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SuccessOrderDialogComponent } from './success-order-dialog/success-order-dialog.component';
 
 
 
 @NgModule({
   declarations: [
     OrderFormComponent,
-    ConfirmOrderComponent,
     PayOrderComponent,
     OrderTableComponent,
-    OrderDetailsComponent
+    OrderDetailsComponent,
+    OrderStateDialogComponent,
+    SuccessOrderDialogComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +41,10 @@ import { MatListModule } from '@angular/material/list';
     MatTableModule,
     MatCardModule,
     MatDividerModule,
-    MatListModule
+    MatListModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatDialogModule
   ]
 })
 export class OrdersModule {}

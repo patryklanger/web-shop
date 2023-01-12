@@ -1,0 +1,12 @@
+<div class="order-state-dialog__container">
+  <h3>Change order state</h3>
+  <mat-form-field>
+    <mat-label>Order state</mat-label>
+      <mat-select [formControl]="stateCtrl">
+        <mat-option *ngFor="let state of orderStates | enumToArray" [value]="state">
+          {{state}}
+        </mat-option>
+  </mat-select>
+  </mat-form-field>
+  <button mat-raised-button (click)="onSubmit()">Submit</button>
+</div>

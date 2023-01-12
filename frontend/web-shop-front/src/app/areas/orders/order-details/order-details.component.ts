@@ -8,6 +8,8 @@ import { UserGatewayService } from 'src/app/core/gateways/user/user-gateway.serv
 import { ProductGatewayService } from 'src/app/core/gateways/products/product-gateway.service';
 import { OrderBasketElement } from 'src/app/core/models/order/order-basket-element.model';
 import { Product } from 'src/app/core/models/product/product.model';
+import { MatDialog } from '@angular/material/dialog';
+import { OrderStateDialogComponent } from '../order-state-dialog/order-state-dialog.component';
 
 @Component({
   selector: 'app-order-details',
@@ -19,11 +21,12 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   user: string;
   products: Product[];
 
+  private readonly orderChanged$ = new ReplaySubject<Order>();
   private readonly userId$ = new ReplaySubject<string>();
   private readonly basket$ = new ReplaySubject<OrderBasketElement[]>();
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private activatedRoute: ActivatedRoute, private orderGateway: OrderGatewayService, private userGateway: UserGatewayService, private productGateway: ProductGatewayService) {}
+  constructor(private activatedRoute: ActivatedRoute, private orderGateway: OrderGatewayService, private userGateway: UserGatewayService, private productGateway: ProductGatewayService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.activatedRoute.paramMap.pipe(
@@ -54,6 +57,17 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
       tap(products => this.products = products),
       takeUntil(this._destroy$)
     ).subscribe()
+
+    this.orderChanged$.pipe(
+      tap(order => this.order = order),
+      takeUntil(this._destroy$)
+    ).subscribe()
+  }
+
+  openEditStateDialog() {
+    this.dialog.open(OrderStateDialogComponent, {
+      data: { id: this.order.id, service: this.orderGateway, orderChanged$: this.orderChanged$, currentState: this.order.orderState },
+    });
   }
 
   getProduct(id: number): Product {

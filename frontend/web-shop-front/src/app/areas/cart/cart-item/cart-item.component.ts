@@ -59,6 +59,9 @@ export class CartItemComponent implements OnInit {
   }
 
   getProductImg(): string {
+    if (this.cartElement?.product.imgUrl === null) {
+      return "/assets/no-image.jpeg";
+    }
     return `${environment.apiEndpoint}/products/${this.cartElement?.product.imgUrl}`
   }
 }

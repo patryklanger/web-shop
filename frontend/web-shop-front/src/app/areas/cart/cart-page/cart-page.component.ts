@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./cart-page.component.scss']
 })
 export class CartPageComponent implements OnInit, OnDestroy {
-  cartItems?: CartElement[];
-  totalAmount?: number;
+  cartItems: CartElement[];
+  totalAmount: number;
 
   private readonly _destroy$ = new Subject<void>();
 

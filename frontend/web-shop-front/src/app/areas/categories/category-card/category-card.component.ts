@@ -33,6 +33,9 @@ export class CategoryCardComponent implements OnInit, OnDestroy {
   }
 
   getProductImg(): string {
+    if (this.category.imgUrl === null) {
+      return "/assets/no-image.jpeg";
+    }
     return `${environment.apiEndpoint}/products/${this.category?.imgUrl}`
   }
 

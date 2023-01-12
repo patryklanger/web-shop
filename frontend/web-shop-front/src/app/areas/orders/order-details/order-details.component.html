@@ -1,4 +1,5 @@
-<mat-card *ngIf="(order&&products&&user); else loading">
+<ng-container *ngIf="(order&&products&&user); else loading">
+<mat-card>
   <mat-card-header>
     <h2>Order details</h2></mat-card-header>
   <mat-card-content>
@@ -19,6 +20,8 @@
   <p><b>Total price: </b>${{getTotalPrice()}}</p>
 </mat-card-content>
 </mat-card>
+<button mat-raised-button style="margin-top: 1rem" (click)="openEditStateDialog()">Change order state</button>
+</ng-container>
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>
 </ng-template>

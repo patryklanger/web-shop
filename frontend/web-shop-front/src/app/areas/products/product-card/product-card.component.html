@@ -1,6 +1,6 @@
 <div *ngIf="product" class="card" style="width: 18rem">
   <div class="card-img-top-container" >
-  <img *ngIf="this.product?.imgUrl !== null" class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" />
+  <img class="card-img-top" src="{{ getProductImg() }}" alt="Card image cap" />
 </div>
   <div class="card-body">
     <h5 class="card-title">{{ product.name }}</h5>

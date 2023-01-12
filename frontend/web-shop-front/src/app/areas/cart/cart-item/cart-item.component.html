@@ -1,5 +1,7 @@
 <mat-card *ngIf="cartElement" class="cart-element">
-  <img class="cart-element__img" [src]="getProductImg()" />
+  <div class="cart-element__img-wrapper">
+  <img class="cart-element__img-wrapper__img" [src]="getProductImg()" />
+  </div>
   <div class="cart-element__name">
     <h3>{{ cartElement.product.name }}</h3>
     <h4>${{ cartElement.product.price }}</h4>

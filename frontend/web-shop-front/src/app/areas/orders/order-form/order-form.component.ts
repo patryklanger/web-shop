@@ -3,9 +3,13 @@ import { FormBuilder, FormControl, Validators, ValidationErrors } from '@angular
 import { Store } from '@ngxs/store';
 import { OrderBasketElement } from 'src/app/core/models/order/order-basket-element.model';
 import { Subject, tap, takeUntil } from 'rxjs';
-import { OrderState } from 'src/app/core/state/order';
+import { OrderState, OrderActions } from 'src/app/core/state/order';
 import { Order } from 'src/app/core/models/order/order.model';
 import { OrderGatewayService } from 'src/app/core/gateways/order/order-gateway.service';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { SuccessOrderDialogComponent } from '../success-order-dialog/success-order-dialog.component';
+import { AppActions } from 'src/app/core/state/app';
 
 const PHONE_NUMBER_REGEX = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
 
@@ -27,7 +31,7 @@ export class OrderFormComponent implements OnInit, OnDestroy {
   private basket: OrderBasketElement[];
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private store: Store, private orderGateway: OrderGatewayService) {}
+  constructor(private fb: FormBuilder, private store: Store, private orderGateway: OrderGatewayService, private router: Router, public dialog: MatDialog) {}
 
   get cityError(): ValidationErrors {
     return this.formGroup.get("city").errors
@@ -64,9 +68,18 @@ export class OrderFormComponent implements OnInit, OnDestroy {
     }
 
     this.orderGateway.createOrder$(order).pipe(
-      tap((order) => console.log(order)),
+      tap(() => this.store.dispatch(new OrderActions.RemoveOrder)),
+      tap(() => this.store.dispatch(new AppActions.EmptyCart)),
+      tap((order) => this.openPayDialog(order.id)),
+      tap(() => this.router.navigateByUrl("/products")),
       takeUntil(this._destroy$)
     ).subscribe()
+  }
+
+  openPayDialog(id: number) {
+    this.dialog.open(SuccessOrderDialogComponent, {
+      data: { id: id },
+    });
   }
 
   ngOnDestroy() {

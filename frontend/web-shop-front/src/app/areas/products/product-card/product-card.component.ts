@@ -21,6 +21,9 @@ export class ProductCardComponent {
   }
 
   getProductImg(): string {
+    if (this.product.imgUrl === null) {
+      return "/assets/no-image.jpeg";
+    }
     return `${environment.apiEndpoint}/products/${this.product?.imgUrl}`
   }
 

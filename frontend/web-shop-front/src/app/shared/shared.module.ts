@@ -23,6 +23,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { AddTagsDialogComponent } from './add-tags-dialog/add-tags-dialog.component';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { EnumToArrayPipe } from './pipe/enum-to-array.pipe';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     ValidationErrorDirective,
     LoadingSpinnerComponent,
     UploadImageDialogComponent,
-    AddTagsDialogComponent
+    AddTagsDialogComponent,
+    EnumToArrayPipe
   ],
   imports: [
     CommonModule,
@@ -54,7 +56,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule
 
   ],
-  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective, LoadingSpinnerComponent, AddTagsDialogComponent]
+  exports: [NavBarComponent, DrawerComponent, PaginatorComponent, ValidationErrorDirective, LoadingSpinnerComponent, AddTagsDialogComponent, EnumToArrayPipe]
 
 })
 export class SharedModule {}

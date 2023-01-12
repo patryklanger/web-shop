@@ -32,6 +32,6 @@ export class OrderState {
 
   @Action(OrderActions.RemoveOrder)
   removeOrder({ setState }: StateContext<OrderStateModel>) {
-    setState({ basket: INITIAL_STATE.basket })
+    setState({ basket: [] })
   }
 }

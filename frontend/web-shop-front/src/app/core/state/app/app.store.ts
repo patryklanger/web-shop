@@ -119,14 +119,18 @@ export class AppState implements OnDestroy {
   refreshCart({ getState, patchState }: StateContext<AppStateModel>) {
     const { cart } = getState();
     const productIds = cart.map(e => e.product.id);
+    console.log(productIds);
     this.productGateway.getProductList$(productIds).pipe(
       tap((products) => {
-        console.log(products);
         const newCart: CartElement[] = [];
         cart.forEach((element) => {
           const product = products.find(p => p.id === element.product.id);
           if (!!product) {
-            newCart.push({ product, quantity: element.quantity })
+            let quantity = element.quantity;
+            if (quantity > product.stockAmount) {
+              quantity = product.stockAmount;
+            }
+            newCart.push({ product, quantity })
           }
           patchState({ cart: newCart })
         })

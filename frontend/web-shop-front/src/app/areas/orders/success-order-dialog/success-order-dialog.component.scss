@@ -1,0 +1,11 @@
+.success-order-dialog{
+  &__container{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  &__button-container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
