@@ -8,6 +8,6 @@
     ></app-cart-item>
   </div>
   <p class="cart-page__total">Total amount: ${{ totalAmount }}</p>
-  <button mat-raised-button (click)="order()">Order</button>
+  <button mat-raised-button [disabled]="cartItems.length === 0" (click)="order()">Order</button>
 </div>
 </div>
