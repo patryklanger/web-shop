@@ -1,4 +1,5 @@
-<h3>Hi! That's your cart</h3>
+<div class="cart-page">
+<h3>Your cart</h3>
 <div *ngIf="cartItems">
   <div class="cart-page__container">
     <app-cart-item
@@ -8,4 +9,5 @@
   </div>
   <p class="cart-page__total">Total amount: ${{ totalAmount }}</p>
   <button mat-raised-button (click)="order()">Order</button>
+</div>
 </div>

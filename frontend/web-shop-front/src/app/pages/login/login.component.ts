@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   getUsers() {
-    this.userGateway.getUsers$().pipe(tap(console.log)).subscribe()
+    this.userGateway.getUsers$().pipe().subscribe()
   }
 
   onFormSubmit() {

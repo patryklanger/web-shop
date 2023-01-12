@@ -85,12 +85,10 @@ export class UserState implements OnDestroy {
 
   @Action(UserActions.LoginSuccess)
   loginSuccess({ setState }: StateContext<UserStateModel>, { payload }: UserActions.LoginSuccess) {
-
     const user = jwt_decode(payload.access_token) as DecodedJwt
-
     const newState: AuthUser = {
       username: user.preferred_username,
-      roles: user.resource_access['auth-service'].roles,
+      roles: user.realm_access.roles,
       refreshToken: payload.refresh_token,
       accessToken: payload.access_token
     }
@@ -113,7 +111,7 @@ export class UserState implements OnDestroy {
 
     patchState({ username: undefined, roles: undefined, loading: false, error: payload })
     this.zone.run(() => {
-      this.notificationService.showSuccessNotification(`Login unsuccessful. \n${payload}`)
+      this.notificationService.showSuccessNotification(`${payload}`)
     });
 
   }

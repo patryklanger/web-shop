@@ -1,7 +1,12 @@
 .cart-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   &__container {
     display: flex;
     flex-direction: column;
+    max-width: 800px;
+    width: 600px;
     gap: 1rem;
   }
   &__total {

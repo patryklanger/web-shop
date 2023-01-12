@@ -119,7 +119,6 @@ export class AppState implements OnDestroy {
   refreshCart({ getState, patchState }: StateContext<AppStateModel>) {
     const { cart } = getState();
     const productIds = cart.map(e => e.product.id);
-    console.log(productIds);
     this.productGateway.getProductList$(productIds).pipe(
       tap((products) => {
         const newCart: CartElement[] = [];
@@ -132,8 +131,8 @@ export class AppState implements OnDestroy {
             }
             newCart.push({ product, quantity })
           }
-          patchState({ cart: newCart })
         })
+        patchState({ cart: newCart })
       }),
       takeUntil(this._destroy$)
     ).subscribe()

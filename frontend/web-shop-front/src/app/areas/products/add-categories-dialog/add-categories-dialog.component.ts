@@ -44,7 +44,6 @@ export class AddCategoriesDialogComponent implements OnInit, OnDestroy {
     event.checked ?
       this.currentCategories.add(+event.source.value) :
       this.currentCategories.delete(+event.source.value)
-    console.log(this.currentCategories);
   }
   onSubmit() {
     const categories = [...this.currentCategories]

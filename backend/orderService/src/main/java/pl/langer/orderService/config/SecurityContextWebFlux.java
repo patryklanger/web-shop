@@ -29,7 +29,7 @@ public class SecurityContextWebFlux {
     SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) throws Exception {
         http.csrf().disable().cors().disable().anonymous().and()
                 .authorizeExchange()
-                .pathMatchers(HttpMethod.POST,"/api/orders").permitAll()
+                .pathMatchers(HttpMethod.POST,"/api/orders", "/api/orders/*/pay").permitAll()
                 .pathMatchers("**").hasRole("admin")
                 .anyExchange().authenticated()
                 .and()

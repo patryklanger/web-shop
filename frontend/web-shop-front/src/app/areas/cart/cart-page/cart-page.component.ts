@@ -29,8 +29,8 @@ export class CartPageComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AppActions.RefreshCart)
     this.store.select(AppState.cart).pipe(
       tap((cart) => this.cartItems = cart),
-      tap(() => {
-        this.totalAmount = this.cartItems?.reduce((acc, item) => acc + item.quantity * item.product.price, 0)
+      tap((cart) => {
+        this.totalAmount = cart.reduce((acc, item) => acc + item.quantity * item.product.price, 0)
       }),
       takeUntil(this._destroy$)
     ).subscribe()
