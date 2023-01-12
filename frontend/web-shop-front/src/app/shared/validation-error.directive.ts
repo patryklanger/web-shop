@@ -1,3 +1,4 @@
+import { L } from '@angular/cdk/keycodes';
 import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
 import { ValidationErrors } from '@angular/forms';
 
@@ -26,6 +27,11 @@ export class ValidationErrorDirective implements OnChanges {
 
     if (this.appError?.max) {
       this.el.nativeElement.innerText = `Maximal value is ${this.appError.max.max}`;
+      return;
+    }
+
+    if (this.appError?.email) {
+      this.el.nativeElement.innerText = "This have to be valid email address";
       return;
     }
   }

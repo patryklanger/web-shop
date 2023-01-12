@@ -5,6 +5,7 @@ import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import pl.langer.authservice.config.KeycloakConfig;
 import pl.langer.authservice.dtos.FindResultDto;
 import pl.langer.authservice.dtos.RegisterRequest;
 import pl.langer.authservice.dtos.UserDto;
+import pl.langer.authservice.exception.UnableToCreateUserException;
 import pl.langer.authservice.exception.UserNotFoundException;
 import pl.langer.authservice.exception.UsernameOrEmailTakenException;
 import pl.langer.authservice.mapper.user.UserMapper;
@@ -19,6 +21,7 @@ import pl.langer.authservice.utils.Credentials;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,7 @@ public class UserService {
 
     private final UserMapper userMapper;
 
-    public void addUser(RegisterRequest registerRequest){
+    public UserDto addUser(RegisterRequest registerRequest){
         CredentialRepresentation credential = Credentials
                 .createPasswordCredentials(registerRequest.getPassword());
         UserRepresentation user = new UserRepresentation();
@@ -47,8 +50,43 @@ public class UserService {
         if(response.getStatus() == HttpStatus.CONFLICT.value()) {
             throw new UsernameOrEmailTakenException("Username or email taken");
         }
+        if(response.getStatus() == HttpStatus.CREATED.value()) {
+            return userMapper.mapModelToDto(user);
+        }
+        throw new UnableToCreateUserException("Unable");
     }
 
+    public UserDto toggleAdminRole(String userId) {
+        var keycloakRealm = KeycloakConfig.getInstance().realm(KeycloakConfig.realm);
+        UsersResource instance = keycloakRealm.users();
+        try {
+            var user = instance.get(userId);
+            List<RoleRepresentation> roleToAdd = new LinkedList<>();
+            roleToAdd.add(keycloakRealm
+                    .roles()
+                    .get("admin")
+                    .toRepresentation());
+
+            var userRoles = user
+                    .roles()
+                    .realmLevel()
+                    .listAll();
+
+            var isAdmin = userRoles
+                    .stream()
+                    .anyMatch(r->r.getName().equals("admin"));
+
+            if(isAdmin){
+                user.roles().realmLevel().remove(roleToAdd);
+            } else {
+                user.roles().realmLevel().add(roleToAdd);
+            }
+            return getUser(user.toRepresentation().getId());
+
+        } catch(Exception e) {
+            throw new UserNotFoundException(("User not found!"));
+        }
+    }
 
     public FindResultDto<UserDto> getUsers(Long page, Long limit) {
         UsersResource instance = KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
@@ -85,6 +123,10 @@ public class UserService {
         UsersResource instance = KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
         try {
             var user = instance.get(userId).toRepresentation();
+            user.setRealmRoles(KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users()
+                    .get(user.getId()).roles().realmLevel().listAll()
+                    .stream()
+                    .map(RoleRepresentation::getName).collect(Collectors.toList()));
             return userMapper.mapModelToDto(user);
         } catch(Exception e) {
             throw new UserNotFoundException(("User not found!"));

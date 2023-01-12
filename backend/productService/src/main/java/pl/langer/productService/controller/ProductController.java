@@ -42,6 +42,11 @@ public class ProductController {
         return new ResponseEntity<>(productService.findList(ids), HttpStatus.OK);
     }
 
+    @PostMapping("/list-with-deleted")
+    public ResponseEntity<List<ProductDto>> getProductListWithDeleted(@RequestBody Set<Long> ids) {
+        return new ResponseEntity<>(productService.findListIncludeDeleted(ids), HttpStatus.OK);
+    }
+
     @PostMapping("/buy")
     public ResponseEntity<List<ProductPriceResponseDto>> getPriceAndDecreaseStockAmount(@RequestBody List<ProductPriceRequestDto> productPriceRequestDtos) {
         return new ResponseEntity<>(productService.getPriceAndDecreaseStockAmount(productPriceRequestDtos), HttpStatus.OK);

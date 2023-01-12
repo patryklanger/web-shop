@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment.prod';
 import { AbstractGatewayService } from '../abstract-gateway.service';
 import { PaginatedResult } from '../../models/paginatedResult.model';
 import { User } from '../../models/user/user.model';
+import { RegisterPageFormData } from 'src/app/pages/register/register-page/register-page-form-data.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,14 @@ export class UserGatewayService extends AbstractGatewayService {
 
   getUser$(id: string): Observable<User> {
     return this.get$(`user/${id}`)
+  }
+
+  createUser$(form: RegisterPageFormData): Observable<User> {
+    return this.post$('user', form);
+  }
+
+  toggleAdmin$(id: string): Observable<User> {
+    return this.post$(`user/${id}/toggleAdmin`)
   }
 
   protected getBaseUrl(): string {

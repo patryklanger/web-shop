@@ -50,7 +50,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
 
     this.basket$.pipe(
       map(basket => basket.map(e => e.productId)),
-      switchMap(list => this.productGateway.getProductList$(list)),
+      switchMap(list => this.productGateway.getProductOrderList$(list)),
       tap(products => this.products = products),
       takeUntil(this._destroy$)
     ).subscribe()
@@ -64,6 +64,10 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
   }
   getTotalPrice() {
     return this.order.basket.reduce((acc, cur) => acc + cur.amount * cur.price, 0)
+  }
+
+  getBasketElement(product: Product) {
+    return this.order.basket.find(e => e.productId === product.id);
   }
 
   ngOnDestroy() {

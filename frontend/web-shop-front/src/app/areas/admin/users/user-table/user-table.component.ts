@@ -17,7 +17,7 @@ export class UserTableComponent implements OnDestroy, OnInit {
 
   private readonly currentPage$ = new BehaviorSubject(0);
 
-  displayedColumns: string[] = ['id', 'username', 'firstName', 'lastName', 'email', 'roles', 'enabled'];
+  displayedColumns: string[] = ['id', 'username', 'firstName', 'lastName', 'email', 'enabled'];
 
   private readonly _destroy$ = new Subject<void>();
 
@@ -51,6 +51,16 @@ export class UserTableComponent implements OnDestroy, OnInit {
       }),
       tap(users => this.loadMoreAvailable = users.startElement + users.count < users.totalCount)
     )
+  }
+
+  onUserChange(user: User) {
+    this.users.map(u => {
+      if (u.id === user.id) {
+        return user;
+      }
+      return u
+    })
+    this.cdr.markForCheck();
   }
 
 }

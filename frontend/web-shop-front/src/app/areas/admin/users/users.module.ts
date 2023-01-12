@@ -5,19 +5,25 @@ import { UsersRoutingModule } from './users-routing.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedModule } from '../../../shared/shared.module';
+import { ToggleAdminComponent } from './toggle-admin/toggle-admin.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
-    UserTableComponent
+    UserTableComponent,
+    ToggleAdminComponent
   ],
   imports: [
     CommonModule,
     UsersRoutingModule,
+    ReactiveFormsModule,
     MatTableModule,
     MatButtonModule,
-    SharedModule
+    SharedModule,
+    MatSlideToggleModule
   ]
 })
 export class UsersModule {}

@@ -1,0 +1,61 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="formGroup" (submit)="onFormSubmit()">
+      <h2>Register</h2>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Username"
+          formControlName="username"
+          name="username"
+          autocomplete="on"
+        />
+        <mat-error [appError]="usernameErrors"></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="First name"
+          formControlName="firstName"
+          name="firstName"
+          autocomplete="on"
+        />
+        <mat-error [appError]="firstNameErrors"></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Last name"
+          formControlName="lastName"
+          name="lastName"
+          autocomplete="on"
+        />
+        <mat-error [appError]="lastNameErrors"></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Email"
+          formControlName="email"
+          name="email"
+          autocomplete="on"
+        />
+        <mat-error [appError]="emailErrors"></mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          type="password"
+          placeholder="Password"
+          formControlName="password"
+          name="password"
+          autocomplete="on"
+        />
+        <mat-error [appError]="passwordErrors"></mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" [disabled]="!formGroup.valid">
+        Register
+      </button>
+    </form>
+  </mat-card-content>
+</mat-card>

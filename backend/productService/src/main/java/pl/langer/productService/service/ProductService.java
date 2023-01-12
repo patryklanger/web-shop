@@ -43,6 +43,11 @@ public class ProductService {
         return products.stream().map(productMapper::mapEntityToDto).collect(Collectors.toList());
     }
 
+    public List<ProductDto> findListIncludeDeleted(Set<Long> ids) {
+        List<Product> products = productRepository.findByIdIn(ids, Sort.by("id").descending());
+        return products.stream().map(productMapper::mapEntityToDto).collect(Collectors.toList());
+    }
+
     public FindResultDto<ProductDto> findAll(SearchDto searchDto, ParamsDto paramsDto) {
         PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
         Page<Product> products;

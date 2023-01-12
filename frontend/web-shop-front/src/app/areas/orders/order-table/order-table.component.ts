@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, Subject, switchMap, takeUntil, tap } from 
 import { OrderGatewayService } from 'src/app/core/gateways/order/order-gateway.service';
 import { Order } from 'src/app/core/models/order/order.model';
 import { PaginatedResult } from 'src/app/core/models/paginatedResult.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-table',
@@ -19,7 +20,7 @@ export class OrderTableComponent implements OnInit, OnDestroy {
   private readonly currentPage$ = new BehaviorSubject(0);
   private readonly _destroy$ = new Subject<void>();
 
-  constructor(private orderGateway: OrderGatewayService, private cdr: ChangeDetectorRef) {}
+  constructor(private orderGateway: OrderGatewayService, private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {
     this.currentPage$.pipe(
@@ -53,6 +54,10 @@ export class OrderTableComponent implements OnInit, OnDestroy {
       }),
       tap(orders => this.loadMoreAvailable = orders.startElement + orders.count < orders.totalCount)
     )
+  }
+
+  goToDetails(event: any) {
+    this.router.navigateByUrl(`/orders/details/${event.id}`)
   }
 
 }

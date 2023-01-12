@@ -11,8 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
+
     Page<Product> findByIsDeletedFalseAndCategories_Id(Long id, Pageable pageable);
+
     Page<Product> findAllByIsDeletedFalse(Pageable pageable);
 
     List<Product> findByIsDeletedFalseAndIdIn(Set<Long> idList, Sort sort);
+
+    List<Product> findByIdIn(Set<Long> idList, Sort sort);
 }

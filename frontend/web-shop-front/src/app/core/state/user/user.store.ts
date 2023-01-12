@@ -78,7 +78,7 @@ export class UserState implements OnDestroy {
     this.authGateway.login$(payload.username, payload.password).pipe(
       mergeMap((e) => ctx.dispatch(new UserActions.LoginSuccess(e))),
       takeUntil(this._destroy$),
-      catchError((e: HttpErrorResponse) => of(ctx.dispatch(new UserActions.LoginError(e.error.message)))),
+      catchError((e: HttpErrorResponse) => of(ctx.dispatch(new UserActions.LoginError(e.error)))),
     ).subscribe()
 
   }
@@ -102,7 +102,9 @@ export class UserState implements OnDestroy {
     })
 
     this.cacheService.saveItemToLocalStorage(USER_LOCAL_STORAGE_KEY, newState);
-    this.notificationService.showSuccessNotification("Login successful")
+    this.zone.run(() => {
+      this.notificationService.showSuccessNotification("Login successful")
+    });
 
   }
 
@@ -110,7 +112,10 @@ export class UserState implements OnDestroy {
   loginError({ patchState }: StateContext<UserStateModel>, { payload }: UserActions.LoginError) {
 
     patchState({ username: undefined, roles: undefined, loading: false, error: payload })
-    this.notificationService.showSuccessNotification(`Login unsuccessful. \n${payload}`)
+    this.zone.run(() => {
+      this.notificationService.showSuccessNotification(`Login unsuccessful. \n${payload}`)
+    });
+
   }
 
   @Action(UserActions.Logout)
@@ -122,8 +127,10 @@ export class UserState implements OnDestroy {
     this.zone.run(() => {
       this.router.navigateByUrl('auth')
     });
+    this.zone.run(() => {
+      this.notificationService.showSuccessNotification(`Logout successful`)
+    });
 
-    this.notificationService.showSuccessNotification(`Logout successful`)
   }
 
   @Action(UserActions.RefreshInit)

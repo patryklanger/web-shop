@@ -2,7 +2,6 @@
   <mat-card-content>
     <form [formGroup]="formGroup" (submit)="onFormSubmit()">
       <h2>Log In</h2>
-      <mat-error *ngIf="loginFailed"> {{ loginFailed }} </mat-error>
       <mat-form-field>
         <input
           matInput

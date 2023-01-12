@@ -21,14 +21,16 @@ public class UserController {
 
     UserService service;
 
-//    @CrossOrigin
     @PostMapping
-    public ResponseEntity<Object> addUser(@RequestBody RegisterRequest registerRequest){
-        service.addUser(registerRequest);
-        return new ResponseEntity<>("User created!", HttpStatus.CREATED);
+    public ResponseEntity<UserDto> addUser(@RequestBody RegisterRequest registerRequest){
+        return new ResponseEntity<>(service.addUser(registerRequest), HttpStatus.CREATED);
     }
 
-//    @CrossOrigin
+    @PostMapping("/{id}/toggleAdmin")
+    public ResponseEntity<UserDto> toggleAdmin(@PathVariable String id) {
+        return new ResponseEntity<>(service.toggleAdminRole(id),HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<FindResultDto<UserDto>> getUsers(@RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10")Long limit) {
         return new ResponseEntity<>(service.getUsers(page, limit), HttpStatus.OK);
