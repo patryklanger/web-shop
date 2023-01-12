@@ -1,0 +1,18 @@
+<mat-card *ngIf="order&&products&&user">
+  <h2>Order details</h2>
+  <mat-divider></mat-divider>
+  <mat-list role="list">
+    <mat-list-item *ngFor="let element of order.basket; let i = index" role="listitem">
+      {{i}} {{getProduct(element.productId).name}}, {{element.amount}} pieces, subprice: {{element.price}}
+    </mat-list-item>
+  </mat-list>
+  <mat-divider></mat-divider>
+  <p>Created at: {{order.createdAt | date}}</p>
+  <p>Bought by user: {{user}}</p>
+  <h4>Address:</h4>
+  <p>{{order.street}}, {{order.buildingNumber}}{{getApartmentNumber()}}</p>
+  <p>{{order.city}}, {{order.country}}</p>
+  <mat-divider></mat-divider>
+  <p><b>Current state: </b>{{order.orderState}}</p>
+  <p><b>Total price: </b>${{getTotalPrice()}}</p>
+</mat-card>

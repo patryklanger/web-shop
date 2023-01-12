@@ -34,6 +34,11 @@ public class UserController {
         return new ResponseEntity<>(service.getUsers(page, limit), HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable String id) {
+        return new ResponseEntity<>(service.getUser(id),HttpStatus.OK);
+    }
+
 //    @CrossOrigin
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String userId) {

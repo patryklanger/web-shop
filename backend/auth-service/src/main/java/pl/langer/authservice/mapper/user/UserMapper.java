@@ -21,10 +21,11 @@ public interface UserMapper {
         if(roles == null) {
             list.add("VISITOR");
         }
-
-        roles.stream()
-                .filter(i -> i.equals("visitor") || i.equals("admin"))
-                .forEach(r->list.add(r));
+        else {
+            roles.stream()
+                    .filter(i -> i.equals("visitor") || i.equals("admin"))
+                    .forEach(r->list.add(r));
+        }
 
         return list;
     }

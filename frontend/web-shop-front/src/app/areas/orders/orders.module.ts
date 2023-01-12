@@ -9,6 +9,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { SharedModule } from '../../shared/shared.module';
 import { OrdersRoutingModule } from './orders-routing.module';
+import { OrderTableComponent } from './order-table/order-table.component';
+import { MatTableModule } from '@angular/material/table';
+import { OrderDetailsComponent } from './order-details/order-details.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 
 
@@ -16,7 +22,9 @@ import { OrdersRoutingModule } from './orders-routing.module';
   declarations: [
     OrderFormComponent,
     ConfirmOrderComponent,
-    PayOrderComponent
+    PayOrderComponent,
+    OrderTableComponent,
+    OrderDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +33,11 @@ import { OrdersRoutingModule } from './orders-routing.module';
     ReactiveFormsModule,
     MatInputModule,
     SharedModule,
-    OrdersRoutingModule
+    OrdersRoutingModule,
+    MatTableModule,
+    MatCardModule,
+    MatDividerModule,
+    MatListModule
   ]
 })
 export class OrdersModule {}

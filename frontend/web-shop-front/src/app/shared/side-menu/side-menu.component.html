@@ -22,5 +22,13 @@
       (click)="toggleMenu()"
       >Users
     </a>
+    <a
+      *ngIf="isAdmin"
+      mat-list-item
+      [routerLink]="['/orders']"
+      routerLinkActive="router-link-active"
+      (click)="toggleMenu()"
+      >Orders
+    </a>
   </mat-nav-list>
 </div>

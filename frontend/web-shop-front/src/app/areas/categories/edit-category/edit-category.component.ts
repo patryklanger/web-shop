@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { Category } from 'src/app/core/models/product/category.model';
@@ -11,7 +11,7 @@ import { NotificationService } from 'src/app/shared/notification/notification.se
   templateUrl: './edit-category.component.html',
   styleUrls: ['./edit-category.component.scss']
 })
-export class EditCategoryComponent implements OnInit {
+export class EditCategoryComponent implements OnInit, OnDestroy {
   category: Category;
   type = FormType.EDIT
   formData: CategoryFormData;

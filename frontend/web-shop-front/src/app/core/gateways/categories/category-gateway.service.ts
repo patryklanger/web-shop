@@ -16,7 +16,7 @@ export class CategoryGatewayService extends AbstractGatewayService implements Im
   uploadImage$(image: File, objectId: number): Observable<Category> {
     const formData = new FormData();
     formData.append("image", image);
-    return this.post$(`category/${objectId}/image`, formData);
+    return this.post$(`${objectId}/image`, formData);
   }
 
   getCategories$(page = 0, limit = 10): Observable<PaginatedResult<Category>> {
@@ -53,7 +53,7 @@ export class CategoryGatewayService extends AbstractGatewayService implements Im
     return `${environment.apiEndpoint}/${this.getResourceName()}`
   }
   protected getResourceName(): string {
-    return 'products/category/';
+    return 'products/category';
   }
 
 

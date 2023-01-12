@@ -22,9 +22,14 @@ export class UserGatewayService extends AbstractGatewayService {
     return this.get$("user", params);
   }
 
+  getUser$(id: string): Observable<User> {
+    return this.get$(`user/${id}`)
+  }
+
   protected getBaseUrl(): string {
     return `${environment.apiEndpoint}/${this.getResourceName()}`
   }
+
   protected getResourceName(): string {
     return 'auth';
   }

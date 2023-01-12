@@ -1,5 +1,5 @@
 import jwt_decode from 'jwt-decode';
-import { Injectable, OnDestroy } from "@angular/core";
+import { Injectable, NgZone, OnDestroy } from "@angular/core";
 import { Action, Selector, State, StateContext } from "@ngxs/store";
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, mergeMap, of, Subject, takeUntil, tap } from "rxjs";
@@ -41,7 +41,8 @@ export class UserState implements OnDestroy {
     private authGateway: AuthGatewayService,
     private notificationService: NotificationService,
     private cacheService: CacheService,
-    private router: Router
+    private router: Router,
+    private zone: NgZone
   ) {}
 
   ngOnDestroy() {
@@ -118,7 +119,9 @@ export class UserState implements OnDestroy {
     setState({ ...INITIAL_STATE });
     this.cacheService.deleteItemFromLocalStorage(USER_LOCAL_STORAGE_KEY)
 
-    this.router.navigateByUrl('auth')
+    this.zone.run(() => {
+      this.router.navigateByUrl('auth')
+    });
 
     this.notificationService.showSuccessNotification(`Logout successful`)
   }

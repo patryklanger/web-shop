@@ -4,7 +4,7 @@
 </div>
   <div class="card-body">
     <h3 class="card-title">{{ category.name }}</h3>
-    <div *ngId="isAdmin" class="card__button-container">
+    <div *ngIf="isAdmin" class="card__button-container">
       <button mat-raised-button (click)="goToEdit()">Edit</button>
     </div>
   </div>

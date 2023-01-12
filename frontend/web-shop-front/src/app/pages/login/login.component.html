@@ -9,6 +9,7 @@
           placeholder="Username"
           formControlName="username"
           name="username"
+          autocomplete="on"
         />
       </mat-form-field>
       <mat-form-field>
@@ -18,6 +19,7 @@
           placeholder="Password"
           formControlName="password"
           name="password"
+          autocomplete="on"
         />
       </mat-form-field>
       <button mat-raised-button color="primary" [disabled]="!formGroup.valid">

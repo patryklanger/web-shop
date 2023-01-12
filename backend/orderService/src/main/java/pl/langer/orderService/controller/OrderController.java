@@ -30,6 +30,11 @@ public class OrderController {
 
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
+        return new ResponseEntity<>(orderService.findById(id), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(Principal principal, @RequestBody @Valid CreateOrderDto createOrderDto) {
         String name = principal.getName();

@@ -44,13 +44,16 @@ public class OrderService {
                 .build();
     }
 
+    public OrderDto findById(Long id) {
+        return orderMapper.mapEntityToDto(orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order not found")));
+    }
+
     public OrderDto save(CreateOrderDto object, String name) {
         if(object == null) {
             throw new NullPointerException("Object cannot be null!");
         }
-        Order order = orderMapper.mapCreateDtoToEntity(object);
-        var basket = order.getBasket().stream().map(basketElementMapper::mapEntityToRequest).collect(Collectors.toList());
         Set<BasketElement> newBasket = new HashSet<BasketElement>();
+        var basket = object.getBasket().stream().map(basketElementMapper::mapCreateRequestToRequest).collect(Collectors.toList());
         Arrays.stream(restService.buyProducts(basket)).map(basketElementMapper::mapResponseToEntity).forEach(e->{
             var element = new BasketElement();
             element.setProductId(e.getProductId());
@@ -58,6 +61,7 @@ public class OrderService {
             element.setPrice(e.getPrice());
             newBasket.add(element);
         });
+        Order order = orderMapper.mapCreateDtoToEntity(object);
         order.setBasket(newBasket);
         order.setUserId(name);
         order.setCreatedAt(new Date());

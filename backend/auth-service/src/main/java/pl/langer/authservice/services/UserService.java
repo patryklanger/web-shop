@@ -81,12 +81,13 @@ public class UserService {
     }
 
 
-    public UserRepresentation getUser(String userId) {
+    public UserDto getUser(String userId) {
         UsersResource instance = KeycloakConfig.getInstance().realm(KeycloakConfig.realm).users();
         try {
-            return instance.get(userId).toRepresentation();
-        } catch (Exception e){
-            throw new UserNotFoundException("User not found");
+            var user = instance.get(userId).toRepresentation();
+            return userMapper.mapModelToDto(user);
+        } catch(Exception e) {
+            throw new UserNotFoundException(("User not found!"));
         }
     }
 

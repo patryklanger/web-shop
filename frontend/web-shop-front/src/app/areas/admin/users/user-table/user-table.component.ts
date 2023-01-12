@@ -12,7 +12,7 @@ import { User } from '../../../../core/models/user/user.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserTableComponent implements OnDestroy, OnInit {
-  users?: User[]
+  users: User[]
   loadMoreAvailable = false;
 
   private readonly currentPage$ = new BehaviorSubject(0);
