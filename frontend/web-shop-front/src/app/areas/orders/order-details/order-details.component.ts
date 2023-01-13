@@ -77,7 +77,7 @@ export class OrderDetailsComponent implements OnInit, OnDestroy {
     return this.order.apartmentNumber ? `/${this.order.apartmentNumber}` : ""
   }
   getTotalPrice() {
-    return this.order.basket.reduce((acc, cur) => acc + cur.amount * cur.price, 0)
+    return this.order.basket.reduce((acc, cur) => acc + cur.price, 0)
   }
 
   getBasketElement(product: Product) {

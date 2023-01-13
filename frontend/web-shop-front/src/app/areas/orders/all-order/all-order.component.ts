@@ -40,7 +40,7 @@ export class AllOrderComponent implements OnInit, OnDestroy {
   }
 
   getTotalPrice(order: Order) {
-    return order.basket.reduce((acc, cur) => acc + cur.amount * cur.price, 0)
+    return order.basket.reduce((acc, cur) => acc + cur.price, 0)
   }
 
   pay(id: number) {
