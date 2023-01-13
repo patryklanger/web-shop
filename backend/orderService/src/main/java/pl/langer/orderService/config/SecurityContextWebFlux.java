@@ -30,6 +30,7 @@ public class SecurityContextWebFlux {
         http.csrf().disable().cors().disable().anonymous().and()
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST,"/api/orders", "/api/orders/*/pay").permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/orders/user").authenticated()
                 .pathMatchers("**").hasRole("admin")
                 .anyExchange().authenticated()
                 .and()

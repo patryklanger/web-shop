@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
-import { Subject, tap, BehaviorSubject, takeUntil, distinctUntilChanged } from 'rxjs';
+import { Subject, tap, BehaviorSubject, takeUntil, distinctUntilChanged, take } from 'rxjs';
 import { FormControl } from '@angular/forms';
 
 
@@ -26,10 +26,15 @@ export class CategoryPickerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const currentCategory$ = this.currentCategory.pipe(
+      tap(value => this.categoryCtrl.setValue(+value)),
+      takeUntil(this._destroy$)
+    )
+
     this.categoryGateway.getCategoriesShort$().pipe(
       tap(categories => this.shortCategories = categories),
-      tap(() => this.categoryCtrl.setValue(+this.currentCategory.getValue())),
-      takeUntil(this._destroy$)
+      tap(() => currentCategory$.subscribe()),
+      take(1)
     ).subscribe()
 
     this.categoryCtrl.valueChanges.pipe(

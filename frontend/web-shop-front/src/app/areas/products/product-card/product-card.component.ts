@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 })
 export class ProductCardComponent {
   @Input() product?: Product;
+  @Input() details = false;
 
   constructor(private store: Store, private router: Router) {}
 

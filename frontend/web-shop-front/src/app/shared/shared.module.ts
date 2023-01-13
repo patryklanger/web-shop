@@ -35,7 +35,7 @@ import { EnumToArrayPipe } from './pipe/enum-to-array.pipe';
     LoadingSpinnerComponent,
     UploadImageDialogComponent,
     AddTagsDialogComponent,
-    EnumToArrayPipe
+    EnumToArrayPipe,
   ],
   imports: [
     CommonModule,

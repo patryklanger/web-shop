@@ -11,7 +11,8 @@ import { AppActions } from 'src/app/core/state/app';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SideMenuComponent implements OnInit, OnDestroy {
-  isAdmin?: boolean;
+  isAdmin: boolean;
+  isLoggedIn: boolean;
 
   private readonly _destroy$ = new Subject<void>()
 
@@ -30,6 +31,11 @@ export class SideMenuComponent implements OnInit, OnDestroy {
     this.store.select(UserState.roles).pipe(
       tap(roles => this.isAdmin = roles?.includes("admin")),
       tap(() => this.cdr.markForCheck()),
+      takeUntil(this._destroy$)
+    ).subscribe()
+
+    this.store.select(UserState.isLoggedIn).pipe(
+      tap(isLoggedIn => this.isLoggedIn = isLoggedIn),
       takeUntil(this._destroy$)
     ).subscribe()
   }

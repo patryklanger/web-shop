@@ -30,6 +30,16 @@ export class OrderGatewayService extends AbstractGatewayService {
     return this.get$(`${id}`);
   }
 
+  getUserOrders$(page = 0, limit = 10): Observable<PaginatedResult<Order>> {
+    const params = new HttpParams({
+      fromObject: {
+        page: page,
+        limit: limit
+      }
+    })
+    return this.get$(`user`, params);
+  }
+
   payOrder$(id: number): Observable<Order> {
     return this.post$(`${id}/pay`)
   }

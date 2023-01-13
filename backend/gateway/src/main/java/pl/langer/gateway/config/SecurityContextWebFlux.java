@@ -37,6 +37,7 @@ public class SecurityContextWebFlux {
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.POST, "/api/auth/user", "/api/auth/login", "/api/auth/refresh-token/**", "/api/orders/**", "/api/products/product/list").permitAll()
                 .pathMatchers(HttpMethod.GET, "/api/products/category/**", "/api/products/product/**", "/api/products/photos/**").permitAll()
+                .pathMatchers(HttpMethod.GET, "/api/orders/user").authenticated()
                 .pathMatchers("**").hasRole("admin")
                 .anyExchange().authenticated()
                 .and()

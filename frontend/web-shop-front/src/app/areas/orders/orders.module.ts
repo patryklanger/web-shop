@@ -18,6 +18,7 @@ import { OrderStateDialogComponent } from './order-state-dialog/order-state-dial
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SuccessOrderDialogComponent } from './success-order-dialog/success-order-dialog.component';
+import { AllOrderComponent } from './all-order/all-order.component';
 
 
 
@@ -28,7 +29,8 @@ import { SuccessOrderDialogComponent } from './success-order-dialog/success-orde
     OrderTableComponent,
     OrderDetailsComponent,
     OrderStateDialogComponent,
-    SuccessOrderDialogComponent
+    SuccessOrderDialogComponent,
+    AllOrderComponent
   ],
   imports: [
     CommonModule,

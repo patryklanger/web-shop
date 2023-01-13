@@ -1,6 +1,7 @@
 package pl.langer.orderService.service;
 
 import lombok.AllArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,10 +15,7 @@ import pl.langer.orderService.model.Order;
 import pl.langer.orderService.model.OrderState;
 import pl.langer.orderService.repository.OrderRepository;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +42,21 @@ public class OrderService {
 
     public OrderDto findById(Long id) {
         return orderMapper.mapEntityToDto(orderRepository.findById(id).orElseThrow(()->new OrderNotFoundException("Order not found")));
+    }
+
+    public FindResultDto<UserOrderDto> findAllByUserId(SearchDto searchDto, String id) {
+        PageRequest pageRequest = PageRequest.of(searchDto.getPage().intValue(), searchDto.getLimit().intValue(), Sort.by("id").descending());
+
+        Page<Order> orders = orderRepository.findAllByUserId(id, pageRequest);
+
+        return FindResultDto.<UserOrderDto>builder()
+                .count((long) orders.getNumberOfElements())
+                .results(orders.getContent().stream()
+                        .map(orderMapper::maptEntityToUserDto)
+                        .collect(Collectors.toList()))
+                .startElement(pageRequest.getOffset())
+                .totalCount(orders.getTotalElements())
+                .build();
     }
 
     public OrderDto save(CreateOrderDto object, String name) {

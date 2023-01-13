@@ -23,12 +23,22 @@
       >Users
     </a>
     <a
+      *ngIf="isLoggedIn"
+      mat-list-item
+      [routerLink]="['/orders/user/all']"
+      routerLinkActive="router-link-active"
+      (click)="toggleMenu()"
+      >My orders
+    </a>
+
+    <a
       *ngIf="isAdmin"
       mat-list-item
       [routerLink]="['/orders']"
       routerLinkActive="router-link-active"
       (click)="toggleMenu()"
-      >Orders
+      >All orders
     </a>
+
   </mat-nav-list>
 </div>

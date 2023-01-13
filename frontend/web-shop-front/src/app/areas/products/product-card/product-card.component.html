@@ -20,7 +20,7 @@
     </p>
     <mat-divider></mat-divider>
     <div class="card__button-container">
-      <button mat-raised-button (click)="goToDetails()">Check it</button>
+      <button *ngIf="!details" mat-raised-button (click)="goToDetails()">Check it</button>
       <button mat-raised-button (click)="addToCart()">Add to cart</button>
     </div>
   </div>

@@ -27,6 +27,16 @@ public class OrderController {
 
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<FindResultDto<UserOrderDto>> getUserOrders(Principal principal, @RequestParam(value = "page", defaultValue = "0") Long page, @RequestParam(value = "limit", defaultValue = "10") Long limit) {
+        String name = principal.getName();
+        SearchDto searchDto = SearchDto.builder()
+                .page(page)
+                .limit(limit)
+                .build();
+        return new ResponseEntity<>(orderService.findAllByUserId(searchDto,name),HttpStatus.OK);
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<OrderDto> getOrderById(@PathVariable Long id) {
         return new ResponseEntity<>(orderService.findById(id), HttpStatus.OK);
