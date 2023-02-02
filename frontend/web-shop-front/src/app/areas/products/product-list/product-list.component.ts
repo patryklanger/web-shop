@@ -46,7 +46,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParamMap.pipe(
       map(paramMap => paramMap.get("categoryId")),
       tap(id => this.categoryId$.next(id!)),
-      tap(() => this.cdr.markForCheck()),
       takeUntil(this._destroy$)
     ).subscribe()
   }

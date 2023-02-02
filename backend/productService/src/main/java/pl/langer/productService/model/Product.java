@@ -32,8 +32,8 @@ public class Product {
 
     @Column(nullable = false)
     @ElementCollection
-
     private Set<String> tags = new HashSet<>();
+
     @Column(nullable = true)
     private String imgUrl;
     @ManyToMany
